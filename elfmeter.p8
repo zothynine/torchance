@@ -14,11 +14,11 @@ function _init()
 end
 
 function _update60()
-	if btn(0) then
+	if btn(0) and player.x>0 then
 		player.x-=1
 		target_x+=1
 	end
-	if btn(1) then
+	if btn(1) and player.x<112 then
 		player.x+=1
 		target_x-=1
 	end
@@ -26,15 +26,11 @@ end
 
 function _draw()
 	cls()
-	rectfill(0,0,127,15,3)
-	rectfill(0,16,127,31,3)
-	rectfill(0,32,127,47,3)
-	rectfill(0,48,127,63,11)
-	rectfill(0,64,127,79,11)
-	rectfill(0,80,127,95,11)
-	rectfill(0,96,127,111,3)
-	rectfill(0,112,127,127,3)
-	line(target_x,10,player.x+8,117,1)
+	rectfill(0,0,127,127,3)
+	
+	line(target_x-1,10,player.x+7,117,11)
+	line(target_x,10,player.x+8,117,11)
+	
 	spr(40,30,5,8,2)
 	spr(1,54,54,2,2)
 	spr(3,player.x,player.y,2,2)
