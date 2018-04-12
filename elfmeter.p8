@@ -5,12 +5,16 @@ __lua__
 --mario zoth, klemens kunz
 
 player = {}
-target_x = 64
 
 function _init()
 	player.x = 54
 	player.y = 109
 	target_x = 62
+	aim_x = set_aim_x(target_x)
+end
+
+function set_aim_x(x)
+	aim_x = x
 end
 
 function _update60()
@@ -22,20 +26,23 @@ function _update60()
 		player.x+=1
 		target_x-=1
 	end
+	set_aim_x(target_x)
 end
 
 function _draw()
 	cls()
 	rectfill(0,0,127,127,3)
 	
-	line(target_x-1,10,player.x+7,117,11)
-	line(target_x,10,player.x+8,117,11)
+	line(target_x-1,26,player.x+7,117,11)
+	line(target_x,26,player.x+8,117,11)
 	
-	spr(40,30,5,8,2)
-	spr(1,54,54,2,2)
-	spr(3,player.x,player.y,2,2)
-	pset(player.x+8,player.y+8,8)
-	pset(player.x+7,player.y+8,8)
+	spr(40,30,5,8,2) --goal
+	spr(1,54,64,2,2) --ball
+	spr(3,player.x,player.y,2,2) --player
+	pal(7,8)
+	spr(3,54,30,2,2,1,1) --goalie
+	pal()
+	print(aim_x,5,5,7)
 end
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
