@@ -11,13 +11,25 @@ function _init()
 	player.y = 109
 	target_x = 62
 	aim_x = set_aim_x(target_x)
+	_update60 = upadte_aim
+	_draw = draw_aim
 end
+
+function _update60()
+end
+
+function _draw()
+end
+-->8
+--start
+-->8
+--aim
 
 function set_aim_x(x)
 	aim_x = x
 end
 
-function _update60()
+function upadte_aim()
 	if btn(0) and player.x>0 then
 		player.x-=1
 		target_x+=1
@@ -29,7 +41,7 @@ function _update60()
 	set_aim_x(target_x)
 end
 
-function _draw()
+function draw_aim()
 	cls()
 	rectfill(0,0,127,127,3)
 	
@@ -44,6 +56,8 @@ function _draw()
 	pal()
 	print(aim_x,5,5,7)
 end
+-->8
+--kick
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
