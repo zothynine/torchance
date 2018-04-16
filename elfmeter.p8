@@ -4,20 +4,6 @@ __lua__
 --elfmeter
 --mario zoth, klemens kunz
 
-player = {}
-
-function _init()
-	player.x = 54
-	player.y = 109
-	target_x = 62
-	aim_x = set_aim_x(target_x)
-	_update60 = update_start
-	_draw = draw_start
-end
-
-function _update60()end
-
-function _draw()end
 -->8
 --start
 
@@ -67,7 +53,30 @@ function draw_aim()
 	print(aim_x,5,5,7)
 end
 -->8
---kick
+--3
+
+-->8
+--4
+-->8
+--5
+-->8
+--6
+-->8
+--initial
+
+function _update60()end
+
+function _draw()end
+
+function _init()
+	player = {}
+	player.x = 54
+	player.y = 109
+	target_x = 62
+	aim_x = set_aim_x(target_x)
+	_update60 = update_start
+	_draw = draw_start
+end
 
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
