@@ -4,6 +4,11 @@ __lua__
 --elfmeter
 --mario zoth, klemens kunz
 
+function check_fresh()
+	if not xdown and fresh then
+		fresh = false
+	end
+end
 -->8
 --start
 
@@ -26,34 +31,48 @@ function set_aim_x(x)
 end
 
 function update_aim()
-	if btn(0) and player.x>0 then
-		player.x-=1
-		target_x+=1
-	end
-	if btn(1) and player.x<112 then
-		player.x+=1
-		target_x-=1
-	end
-	set_aim_x(target_x)
+	xdown = btn(5)
 	
-	if btnp(5) then
-		_update60=update_kick
+	check_fresh()
+	
+	if btn(0)
+				and player.x > 0 then
+		player.x -= 1
+		target_x += 1
+	end
+	
+	if btn(1) 
+				and player.x < 112 then
+		player.x += 1
+		target_x -= 1
+	end
+	
+	if xdown and not fresh then
+		fresh = true
+		_update60 = update_kick
 		_draw=draw_kick
 	end
+	
+	set_aim_x(target_x)
 end
 
 function draw_aim()
 	cls()
-	rectfill(0,0,127,127,3) --grass	
-	line(target_x-1,26,player.x+7,117,11) --aiming line
-	spr(40,30,5,8,2) --goal
+	--grass
+	rectfill(0,0,127,127,3)
+	--aiming line
+	line(target_x-1,26,player.x+7,117,11)
+	--goal
+	spr(40,30,5,8,2)
+	--ball
 	fillp(4+8+64+128+ 	256+512+4096+8192)
 	circfill(61,71,4,0x57)
 	fillp()
-	
-	spr(1,player.x,player.y,2,2) --player
+	--player
+	spr(1,player.x,player.y,2,2)
 	pal(12,8)
-	spr(1,54,20,2,2,1,1) --goalie
+	--goalie
+	spr(1,54,20,2,2,1,1)
 	pal()
 	--print(aim_x,5,5,7)
 end
@@ -61,12 +80,23 @@ end
 --kick
 
 function update_kick()
-
+	xdown = btn(5)
+		
+	check_fresh()
+	
+	if xdown and not fresh then
+		kicking.started = true
+	end
+	
+	if not xdown
+				and kicking.started then
+		kicking.ended = true
+	end
 end
 
 function draw_kick()
 	cls()
-	print("kick")
+	print(tostr(kicking.started)..","..tostr(kicking.ended))
 end
 
 -->8
@@ -83,9 +113,14 @@ function _update60()end
 function _draw()end
 
 function _init()
+	xdown = false
 	player = {}
+	kicking = {}
 	player.x = 54
 	player.y = 109
+	fresh = true
+	kicking.started = false
+	kicking.ended = false
 	target_x = 62
 	aim_x = set_aim_x(target_x)
 	_update60 = update_start
