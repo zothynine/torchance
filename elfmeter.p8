@@ -35,6 +35,11 @@ function update_aim()
 		target_x-=1
 	end
 	set_aim_x(target_x)
+	
+	if btnp(5) then
+		_update60=update_kick
+		_draw=draw_kick
+	end
 end
 
 function draw_aim()
@@ -50,10 +55,19 @@ function draw_aim()
 	pal(12,8)
 	spr(1,54,20,2,2,1,1) --goalie
 	pal()
-	print(aim_x,5,5,7)
+	--print(aim_x,5,5,7)
 end
 -->8
---3
+--kick
+
+function update_kick()
+
+end
+
+function draw_kick()
+	cls()
+	print("kick")
+end
 
 -->8
 --4
