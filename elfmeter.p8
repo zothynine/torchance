@@ -11,17 +11,27 @@ function _init()
 	player.y = 109
 	target_x = 62
 	aim_x = set_aim_x(target_x)
-	_update60 = upadte_aim
-	_draw = draw_aim
+	_update60 = update_start
+	_draw = draw_start
 end
 
-function _update60()
-end
+function _update60()end
 
-function _draw()
-end
+function _draw()end
 -->8
 --start
+
+function update_start()
+	if btnp(5) then
+		_update60 = update_aim
+		_draw = draw_aim
+	end
+end
+
+function draw_start()
+	cls()
+	print("starten mit [x]",45,60,8)
+end
 -->8
 --aim
 
@@ -29,7 +39,7 @@ function set_aim_x(x)
 	aim_x = x
 end
 
-function upadte_aim()
+function update_aim()
 	if btn(0) and player.x>0 then
 		player.x-=1
 		target_x+=1
