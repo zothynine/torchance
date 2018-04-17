@@ -28,34 +28,37 @@ end
 -->8
 --aim
 
-function set_aim_x(x)
-	aim_x = x
-end
-
 function update_aim()
-	xdown = btn(5)
-	
+	xdown = btn(5)	
 	check_fresh()
-	
-	if btn(0)
-				and player.x > 0 then
-		player.x -= 1
-		target_x += 1
-	end
-	
-	if btn(1) 
-				and player.x < 112 then
-		player.x += 1
-		target_x -= 1
-	end
-	
+
 	if xdown and not fresh then
+		aiming.started = true
+	end
+	
+	if not xdown
+				and aiming.started then
+		aiming.ended = true
+	end
+
+	if aiming.started
+				and not aiming.ended then
+		
+		if player.x == 0
+					or player.x == 112 then
+			aiming.direction = aiming.direction * -1
+		end
+		
+		player.x = player.x+aiming.direction
+		target_x = target_x+aiming.direction*-1
+				
+	end
+	
+	if aiming.ended then
 		fresh = true
 		_update60 = update_kick
-		_draw=draw_kick
+		_draw = draw_kick
 	end
-	
-	set_aim_x(target_x)
 end
 
 function draw_aim()
@@ -76,14 +79,12 @@ function draw_aim()
 	--goalie
 	spr(1,54,20,2,2,1,1)
 	pal()
-	--print(aim_x,5,5,7)
 end
 -->8
 --kick
 
 function update_kick()
-	xdown = btn(5)
-		
+	xdown = btn(5)	
 	check_fresh()
 	
 	if xdown and not fresh then
@@ -98,6 +99,9 @@ end
 
 function draw_kick()
 	cls()
+	print(xdown)
+	print(fresh)
+	print(target_x)
 	print(tostr(kicking.started)..","..tostr(kicking.ended))
 end
 
@@ -118,13 +122,16 @@ function _init()
 	xdown = false
 	player = {}
 	kicking = {}
+	aiming = {}
 	player.x = 54
 	player.y = 109
 	fresh = true
+	aiming.direction = -1
+	aiming.started = false
+	aiming.ended = false
 	kicking.started = false
 	kicking.ended = false
 	target_x = 62
-	aim_x = set_aim_x(target_x)
 	_update60 = update_start
 	_draw = draw_start
 end
