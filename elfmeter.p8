@@ -103,7 +103,12 @@ end
 function draw_kick()
 	cls()
 	draw_field()
-	print(aim_x,5,5,7)
+	
+	--debug
+	color(7)
+	print(aim_x)
+	color()
+	--/debug
 end
 
 -->8
