@@ -9,6 +9,11 @@ function check_fresh()
 		fresh = false
 	end
 end
+
+function draw_field()
+		--grass
+	rectfill(0,0,127,127,3)
+end
 -->8
 --start
 
@@ -21,8 +26,7 @@ end
 
 function draw_start()
 	cls()
-	--grass
-	rectfill(0,0,127,127,3)
+	draw_field()
 	print("starten mit [x]",35,60,7)
 end
 -->8
@@ -50,7 +54,7 @@ function update_aim()
 		end
 		
 		player.x = player.x+aiming.direction
-		target_x = target_x+aiming.direction*-1
+		aim_x = aim_x+aiming.direction*-1
 				
 	end
 	
@@ -63,10 +67,9 @@ end
 
 function draw_aim()
 	cls()
-	--grass
-	rectfill(0,0,127,127,3)
+	draw_field()
 	--aiming line
-	line(target_x-1,26,player.x+7,117,11)
+	line(aim_x-1,26,player.x+7,117,11)
 	--goal
 	spr(40,30,5,8,2)
 	--ball
@@ -99,10 +102,8 @@ end
 
 function draw_kick()
 	cls()
-	print(xdown)
-	print(fresh)
-	print(target_x)
-	print(tostr(kicking.started)..","..tostr(kicking.ended))
+	draw_field()
+	print(aim_x,5,5,7)
 end
 
 -->8
@@ -131,7 +132,7 @@ function _init()
 	aiming.ended = false
 	kicking.started = false
 	kicking.ended = false
-	target_x = 62
+	aim_x = 62
 	_update60 = update_start
 	_draw = draw_start
 end
