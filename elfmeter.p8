@@ -21,6 +21,25 @@ function draw_goal_top()
 	fillp()
 	rect(30,5,95,22,7)
 end
+
+--juicyness
+function blink_hint_txt()
+	
+	if hint.blinktimer == 6 then
+	
+ 	hint.colpos += 1
+ 	
+ 	if hint.colpos > #hint.colors then
+ 		hint.colpos = 1
+ 	end
+
+ 	hint.txtcol = hint.colors[hint.colpos]
+ 	
+ 	hint.blinktimer = 0
+	end
+	
+	hint.blinktimer += 1
+end
 -->8
 --start
 
@@ -89,6 +108,12 @@ function draw_aim()
 	--goalie
 	spr(1,54,20,2,2,1,1)
 	pal()
+	if not aiming.started then
+		blink_hint_txt()
+		rectfill(0,60,127,72,7)
+		print("halte [x] um zu zielen",22,64,hint.txtcol)
+	end
+
 end
 -->8
 --kick
@@ -133,18 +158,23 @@ function _draw()end
 
 function _init()
 	xdown = false
+	fresh = true
 	player = {}
 	kicking = {}
 	aiming = {}
+	hint = {}
 	player.x = 54
 	player.y = 109
-	fresh = true
 	aiming.direction = -1
 	aiming.started = false
 	aiming.ended = false
+	aim_x = 62
 	kicking.started = false
 	kicking.ended = false
-	aim_x = 62
+	hint.colors = {15,14,6,14}
+	hint.colpos = 1
+	hint.txtcol = hint.colors[1]
+	hint.blinktimer = 0
 	_update60 = update_start
 	_draw = draw_start
 end
