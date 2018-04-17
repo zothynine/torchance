@@ -21,7 +21,9 @@ end
 
 function draw_start()
 	cls()
-	print("starten mit [x]",45,60,8)
+	--grass
+	rectfill(0,0,127,127,3)
+	print("starten mit [x]",35,60,7)
 end
 -->8
 --aim
