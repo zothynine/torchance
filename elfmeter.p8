@@ -19,7 +19,7 @@ function check_fresh()
 	end
 end
 
-function draw_field()
+function draw_field_top()
 	map(0,0,0,0,16,16)
 end
 
@@ -60,7 +60,7 @@ end
 
 function draw_start()
 	cls()
-	draw_field()
+	draw_field_top()
 		
 	--show start hint
 	blink_hint_txt()
@@ -105,14 +105,14 @@ end
 
 function draw_aim()
 	cls()
-	draw_field()
+	draw_field_top()
 	--goal top
 	draw_goal_top()
 	--aiming line
-	line(aim_x-1,26,player.x+3,player.y+3,1)
+	line(aim_x,26,player.x+3,player.y+3,1)
 	--ball
-	fillp(4+8+64+128+ 	256+512+4096+8192)
-	circfill(61,71,2,0x57)
+	fillp(ball.smallp)
+	circfill(ball.x,ball.y,ball.r,ball.col)
 	fillp()
 	--player
 	spr(1,player.x,player.y,1,1)
@@ -122,11 +122,11 @@ function draw_aim()
 	pal()
 	
 	--show aiming hint
-	if not aiming.started then
-		blink_hint_txt()
-		rectfill(0,60,127,72,7)
-		print("halte [x] um zu zielen",22,64,hint.txtcol)
-	end
+--	if not aiming.started then
+--	 blink_hint_txt()
+--		rectfill(0,60,127,72,7)
+--		print("halte [x] um zu zielen",22,64,hint.txtcol)
+--	end
 
 end
 -->8
@@ -148,7 +148,7 @@ end
 
 function draw_kick()
 	cls()
-	draw_field()
+	draw_field_top()
 	
 	--debug
 	color(7)
@@ -178,8 +178,9 @@ function _init()
 	kicking = {}
 	aiming = {}
 	hint = {}
+	ball = {}
 	player.x = 59
-	player.y = 112
+	player.y = 113
 	aiming.direction = -1
 	aiming.started = false
 	aiming.ended = false
@@ -190,6 +191,12 @@ function _init()
 	hint.colpos = 1
 	hint.txtcol = hint.colors[1]
 	hint.blinktimer = 0
+	ball.r = 2
+	ball.x = 62
+	ball.y = 71
+	ball.col = 0x57
+	ball.bigp = 0b0011001111001100
+	ball.smallp = 0b0101101001011010
 	_update60 = update_start
 	_draw = draw_start
 end
