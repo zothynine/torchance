@@ -4,6 +4,15 @@ __lua__
 --elfmeter
 --mario zoth, klemens kunz
 
+--todo:
+--  - start screen
+--	 -	kick screen
+--  - better sprites
+--  - sfx/music
+--  - juicyness
+--    - fade out start on [x]
+--    - fadein aiming
+
 function check_fresh()
 	if not xdown and fresh then
 		fresh = false
