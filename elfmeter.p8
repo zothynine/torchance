@@ -146,27 +146,30 @@ function update_kick()
 	end
 	
 	if kicking.started
-	and not kicking.ended then
-		kicking.stren+=kicking.stren_dir
-		if kicking.stren <= 65
-		or kicking.stren >= 126 then
-			kicking.stren_dir *= -1
-		end
+		and not kicking.ended then
+		
+		kicking.stren+=kicking.velo
+		
+		if kicking.stren <= 0
+			or kicking.stren >= 60 then
+			kicking.velo *= -1
+		end	
 	end
 end
 
 function draw_kick()
 	cls()
 	draw_field_top()
-	-- strength
-	rectfill(125,64,127,127,7)
+	-- strength bar
+	rectfill(124,64,127,126,7)
+	rectfill(125,125-kicking.stren,126,125,3)
 	--rect(124,64,127,127,7)
-	line(126,kicking.stren,126,126,3)
 	
 	--debug
 	color(7)
 	print(aim_x)
 	print(tostr(kicking.started)..","..tostr(kicking.ended))
+	print(kicking.stren)
 	color()
 	--/debug
 end
@@ -200,8 +203,9 @@ function _init()
 	aim_x = 62
 	kicking.started = false
 	kicking.ended = false
-	kicking.stren = 126
-	kicking.stren_dir = -4
+	kicking.stren = 0
+	--kicking.velo = 2
+	kicking.velo = 2
 	hint.colors = {7,6,5,5,6}
 	hint.colpos = 1
 	hint.txtcol = hint.colors[1]
