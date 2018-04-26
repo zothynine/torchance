@@ -86,8 +86,8 @@ function update_aim()
 	if aiming.started
 				and not aiming.ended then
 		
-		if player.x == 0
-					or player.x == 112 then
+		if player.x <= 0
+					or player.x >= 112 then
 			aiming.direction = aiming.direction * -1
 		end
 		
@@ -122,11 +122,11 @@ function draw_aim()
 	pal()
 	
 	--show aiming hint
---	if not aiming.started then
---	 blink_hint_txt()
---		rectfill(0,60,127,72,7)
---		print("halte [x] um zu zielen",22,64,hint.txtcol)
---	end
+	if not aiming.started then
+	 blink_hint_txt()
+		rectfill(0,60,127,72,7)
+		print("halte [x] um zu zielen",22,64,hint.txtcol)
+	end
 
 end
 -->8
@@ -144,11 +144,24 @@ function update_kick()
 				and kicking.started then
 		kicking.ended = true
 	end
+	
+	if kicking.started
+	and not kicking.ended then
+		kicking.stren+=kicking.stren_dir
+		if kicking.stren <= 65
+		or kicking.stren >= 126 then
+			kicking.stren_dir *= -1
+		end
+	end
 end
 
 function draw_kick()
 	cls()
 	draw_field_top()
+	-- strength
+	rectfill(125,64,127,127,7)
+	--rect(124,64,127,127,7)
+	line(126,kicking.stren,126,126,3)
 	
 	--debug
 	color(7)
@@ -181,12 +194,14 @@ function _init()
 	ball = {}
 	player.x = 59
 	player.y = 113
-	aiming.direction = -1
+	aiming.direction = -3-rnd(2)
 	aiming.started = false
 	aiming.ended = false
 	aim_x = 62
 	kicking.started = false
 	kicking.ended = false
+	kicking.stren = 126
+	kicking.stren_dir = -4
 	hint.colors = {7,6,5,5,6}
 	hint.colpos = 1
 	hint.txtcol = hint.colors[1]
