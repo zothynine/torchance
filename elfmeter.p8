@@ -91,7 +91,15 @@ function update_aim()
 			aiming.direction = aiming.direction * -1
 		end
 		
-		aim_x = aim_x+aiming.direction*-1
+		aim_x = aim_x+aiming.direction*-1		
+		
+		if abs(aiming.direction) < aiming.full then
+			if aiming.direction < 0 then
+					aiming.direction -= 0.1
+			else
+					aiming.direction += 0.1
+			end
+		end
 	end
 	
 	if aiming.ended then
@@ -203,7 +211,8 @@ function _init()
 	ball = {}
 	player.x = 59
 	player.y = 113
-	aiming.direction = -3-rnd(2)
+	aiming.direction = 0.1
+	aiming.full = 6
 	aiming.started = false
 	aiming.ended = false
 	aim_x = 62
