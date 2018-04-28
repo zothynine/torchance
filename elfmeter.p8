@@ -92,7 +92,6 @@ function update_aim()
 		end
 		
 		aim_x = aim_x+aiming.direction*-1
-				
 	end
 	
 	if aiming.ended then
@@ -149,20 +148,26 @@ function update_kick()
 		
 		kicking.stren+=kicking.velo
 		
-		if kicking.stren <= 0
-			or kicking.stren >= 60 then
-			kicking.velo *= -1
+		--if kicking.stren <= 0
+		--	or kicking.stren >= 62 then
+		--	kicking.velo *= -1
+		--end
+		if kicking.stren >= 62 then
+			kicking.ended = true
 		end	
 	end
 end
 
 function draw_kick()
+	local str_y = 124-kicking.stren
 	cls()
 	draw_field_top()
 	-- strength bar
-	rectfill(124,64,127,126,7)
-	rectfill(125,125-kicking.stren,126,125,3)
-	--rect(124,64,127,127,7)
+	rectfill(122,60,125,125,7)
+	rectfill(123,61,124,124,10)
+	rectfill(123,61,124,71,9)
+	rectfill(123,61,124,63,8)
+	line(121,str_y,126,str_y,1)
 	
 	--debug
 	color(7)
@@ -203,8 +208,7 @@ function _init()
 	kicking.started = false
 	kicking.ended = false
 	kicking.stren = 0
-	--kicking.velo = 2
-	kicking.velo = 2
+	kicking.velo = 2.5
 	hint.colors = {7,6,5,5,6}
 	hint.colpos = 1
 	hint.txtcol = hint.colors[1]
