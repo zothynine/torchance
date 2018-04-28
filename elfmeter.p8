@@ -86,12 +86,11 @@ function update_aim()
 	if aiming.started
 				and not aiming.ended then
 		
-		if player.x <= 0
-					or player.x >= 112 then
+		if aim_x <= 0
+					or aim_x >= 127 then
 			aiming.direction = aiming.direction * -1
 		end
 		
-		player.x = player.x+aiming.direction
 		aim_x = aim_x+aiming.direction*-1
 				
 	end
@@ -109,7 +108,7 @@ function draw_aim()
 	--goal top
 	draw_goal_top()
 	--aiming line
-	line(aim_x,26,player.x+3,player.y+3,1)
+	line(aim_x,26,ball.x,ball.y,1)
 	--ball
 	fillp(ball.smallp)
 	circfill(ball.x,ball.y,ball.r,ball.col)
@@ -212,7 +211,7 @@ function _init()
 	hint.blinktimer = 0
 	ball.r = 2
 	ball.x = 62
-	ball.y = 71
+	ball.y = 88
 	ball.col = 0x57
 	ball.bigp = 0b0011001111001100
 	ball.smallp = 0b0101101001011010
