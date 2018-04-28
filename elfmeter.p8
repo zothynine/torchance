@@ -19,7 +19,7 @@ function check_fresh()
 	end
 end
 
-function draw_field_top()
+function draw_grass()
 	map(0,0,0,0,16,16)
 end
 
@@ -60,7 +60,7 @@ end
 
 function draw_start()
 	cls()
-	draw_field_top()
+	draw_grass()
 		
 	--show start hint
 	blink_hint_txt()
@@ -103,7 +103,7 @@ end
 
 function draw_aim()
 	cls()
-	draw_field_top()
+	draw_grass()
 	--goal top
 	draw_goal_top()
 	--aiming line
@@ -147,27 +147,29 @@ function update_kick()
 		and not kicking.ended then
 		
 		kicking.stren+=kicking.velo
+		kicking.bary-=kicking.velo
+		kicking.velo+=0.1
+		if kicking.velo >=2.5 then
+			kicking.velo = 2.5
+		end
 		
-		--if kicking.stren <= 0
-		--	or kicking.stren >= 62 then
-		--	kicking.velo *= -1
-		--end
-		if kicking.stren >= 62 then
+		if kicking.stren >= kicking.full then
+			kicking.bary = kicking.full
 			kicking.ended = true
 		end	
 	end
 end
 
 function draw_kick()
-	local str_y = 124-kicking.stren
+	local _y = kicking.bary
 	cls()
-	draw_field_top()
+	draw_grass()
 	-- strength bar
 	rectfill(122,60,125,125,7)
 	rectfill(123,61,124,124,10)
 	rectfill(123,61,124,71,9)
 	rectfill(123,61,124,63,8)
-	line(121,str_y,126,str_y,1)
+	line(121,_y,126,_y,1)
 	
 	--debug
 	color(7)
@@ -208,7 +210,9 @@ function _init()
 	kicking.started = false
 	kicking.ended = false
 	kicking.stren = 0
-	kicking.velo = 2.5
+	kicking.full = 62
+	kicking.velo = 0.1
+	kicking.bary = 124
 	hint.colors = {7,6,5,5,6}
 	hint.colpos = 1
 	hint.txtcol = hint.colors[1]
