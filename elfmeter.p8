@@ -58,9 +58,6 @@ function update_start()
 end
 
 function draw_start()
-	cls()
-	draw_grass()
-		
 	--show start hint
 	blink_hint_txt()
 	rectfill(0,60,127,72,7)
@@ -108,8 +105,6 @@ function update_aim()
 end
 
 function draw_aim()
-	cls()
-	draw_grass()
 	--goal top
 	draw_goal_top()
 	--aiming line
@@ -168,8 +163,6 @@ end
 
 function draw_kick()
 	local _y = kicking.bary
-	cls()
-	draw_grass()
 	-- strength bar
 	rectfill(122,60,125,125,7)
 	rectfill(123,61,124,124,10)
@@ -207,6 +200,8 @@ function _update60()
 end
 
 function _draw()
+	cls()
+	draw_grass()
 	if mode == "start" then
 		draw_start()
 	elseif mode == "aim" then
