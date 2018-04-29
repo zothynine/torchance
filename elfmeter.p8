@@ -53,8 +53,7 @@ end
 
 function update_start()
 	if btnp(5) then
-		_update60 = update_aim
-		_draw = draw_aim
+		mode = "aim"
 	end
 end
 
@@ -104,8 +103,7 @@ function update_aim()
 	
 	if aiming.ended then
 		fresh = true
-		_update60 = update_kick
-		_draw = draw_kick
+		mode = "kick"
 	end
 end
 
@@ -197,11 +195,29 @@ end
 -->8
 --initial
 
-function _update60()end
+function _update60()
+	if mode == "start" then
+		update_start()
+	elseif mode == "aim" then
+		update_aim()
+	elseif mode == "kick" then
+		update_kick()
+	end
 
-function _draw()end
+end
+
+function _draw()
+	if mode == "start" then
+		draw_start()
+	elseif mode == "aim" then
+		draw_aim()
+	elseif mode == "kick" then
+		draw_kick()
+	end
+end
 
 function _init()
+	mode = "start"
 	xdown = false
 	fresh = true
 	player = {}
@@ -232,8 +248,6 @@ function _init()
 	ball.col = 0x57
 	ball.bigp = 0b0011001111001100
 	ball.smallp = 0b0101101001011010
-	_update60 = update_start
-	_draw = draw_start
 end
 
 __gfx__
