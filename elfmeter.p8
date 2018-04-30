@@ -1,17 +1,33 @@
 pico-8 cartridge // http://www.pico-8.com
 version 16
 __lua__
---elfmeter
+--torchance
 --mario zoth, klemens kunz
 
 --todo:
---  - start screen
+--		- score
+--		- aiming screen
+--				- random ball position
+
 --	 -	kick screen
---  - better sprites
---  - sfx/music
+--				- bigger bar on start
+--				- random goalie actions
+--				- learning goalie
+
+--  - start screen
+--		- screen setup
+				
 --  - juicyness
---    - fade out start on [x]
---    - fadein aiming
+--    - fade out on mode change
+--				- particles
+--				- screenshake
+
+--  - sfx/music
+--  - finalize gfx
+
+--  - nice to have
+--				- oefb mode
+--				- highscores (local)
 
 function check_fresh()
 	if not xdown and fresh then
