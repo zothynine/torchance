@@ -179,6 +179,21 @@ end
 
 function draw_kick()
 	local _y = kicking.bary
+	--goal top
+	draw_goal_top()
+	--aiming line
+	line(aim_x,26,ball.x,ball.y,1)
+	--ball
+	fillp(ball.smallp)
+	circfill(ball.x,ball.y,ball.r,ball.col)
+	fillp()
+	--player
+	spr(1,player.x,player.y,1,1)
+	pal(8,1)
+	--goalie
+	spr(1,49,2,2,2,1,1)
+	pal()
+	
 	-- strength bar
 	rectfill(122,60,125,125,7)
 	rectfill(123,61,124,124,10)
@@ -212,7 +227,6 @@ function _update60()
 	elseif mode == "kick" then
 		update_kick()
 	end
-
 end
 
 function _draw()
