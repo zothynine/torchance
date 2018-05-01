@@ -83,8 +83,19 @@ end
 --aim
 
 function update_aim()
-	xdown = btn(5)	
-	check_fresh()
+	
+	if ball.y > ball.ty then
+		ball.y-=1
+		player.x = ball.x-3
+		player.y = ball.y+5
+	else
+		ball.inplace = true
+	end
+	
+	if ball.inplace then
+		xdown = btn(5)	
+		check_fresh()
+	end
 
 	if xdown and not fresh then
 		aiming.started = true
@@ -123,10 +134,19 @@ end
 function draw_aim()
 	--goal top
 	draw_goal_top()
-	--aiming line
-	line(aim_x,26,ball.x,ball.y,1)
+	if ball.inplace then
+		--aiming line
+		line(aim_x,26,ball.x,ball.y,1)
+	end
 	--ball
-	fillp(ball.smallp)
+	if not ball.inplace and timer.frames%3 == 0 then
+ 	if ball.pat == ball.smallp then
+ 		ball.pat = ball.smallp2
+ 	else
+ 		ball.pat = ball.smallp
+ 	end
+ end
+	fillp(ball.pat)
 	circfill(ball.x,ball.y,ball.r,ball.col)
 	fillp()
 	--player
@@ -137,11 +157,13 @@ function draw_aim()
 	pal()
 	
 	--show aiming hint
-	if not aiming.started then
+	if ball.inplace and not aiming.started then
 	 blink_hint_txt()
 		rectfill(0,60,127,72,7)
 		print("halte [x] um zu zielen",22,64,hint.txtcol)
 	end
+	
+	print(ball.y..", "..ball.ty,5,5,7)
 
 end
 -->8
@@ -220,6 +242,11 @@ end
 --initial
 
 function _update60()
+	timer.frames += 1
+	if timer.frames == 59 then
+		timer.frames = 0
+	end
+
 	if mode == "start" then
 		update_start()
 	elseif mode == "aim" then
@@ -243,6 +270,9 @@ end
 
 function _init()
 	mode = "start"
+	timer = {
+		frames = 0
+	}
 	xdown = false
 	fresh = true
 	player = {}
@@ -268,11 +298,16 @@ function _init()
 	hint.txtcol = hint.colors[1]
 	hint.blinktimer = 0
 	ball.r = 2
-	ball.x = 62
-	ball.y = 88
+	ball.x = flr(rnd(110))
+	ball.y = 130
+	ball.ty = 60+flr(rnd(45))
+	ball.inplace = false
 	ball.col = 0x57
 	ball.bigp = 0b0011001111001100
+	ball.bigp2 = 0b1100110000110011
 	ball.smallp = 0b0101101001011010
+	ball.smallp2 = 0b1010010110100101
+	ball.pat = ball.smallp
 end
 
 __gfx__
