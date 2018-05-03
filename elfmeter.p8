@@ -6,9 +6,6 @@ __lua__
 
 --todo:
 --		- score
---		- aiming screen
---				- random ball position
-
 --	 -	kick screen
 --				- bigger bar on start
 --				- random goalie actions
@@ -83,11 +80,15 @@ end
 --aim
 
 function update_aim()
+		player.x = ball.x-3
+	
 	
 	if ball.y > ball.ty then
 		ball.y-=1
-		player.x = ball.x-3
-		player.y = ball.y+5
+		player.y = ball.y+player.runin
+	elseif player.runin > 5 then
+		player.runin -= 1
+		player.y = ball.y+player.runin
 	else
 		ball.inplace = true
 	end
@@ -139,7 +140,8 @@ function draw_aim()
 		line(aim_x,26,ball.x,ball.y,1)
 	end
 	--ball
-	if not ball.inplace and timer.frames%3 == 0 then
+	if not ball.inplace
+				and timer.frames%6 == 0 then
  	if ball.pat == ball.smallp then
  		ball.pat = ball.smallp2
  	else
@@ -159,11 +161,11 @@ function draw_aim()
 	--show aiming hint
 	if ball.inplace and not aiming.started then
 	 blink_hint_txt()
-		rectfill(0,60,127,72,7)
-		print("halte [x] um zu zielen",22,64,hint.txtcol)
+		rectfill(0,0,127,12,7)
+		print("halte [x] um zu zielen",22,4,hint.txtcol)
 	end
 	
-	print(ball.y..", "..ball.ty,5,5,7)
+	print(ball.y..", "..ball.ty,5,120,7)
 
 end
 -->8
@@ -282,6 +284,7 @@ function _init()
 	ball = {}
 	player.x = 59
 	player.y = 113
+	player.runin = 30
 	aiming.direction = 0.1
 	aiming.full = 6
 	aiming.started = false
