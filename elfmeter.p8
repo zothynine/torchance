@@ -113,12 +113,12 @@ function update_aim()
 	if aiming.started
 				and not aiming.ended then
 		
-		if aim_x <= 0
-					or aim_x >= 127 then
+		if aiming.x <= 0
+					or aiming.x >= 127 then
 			aiming.direction = aiming.direction * -1
 		end
 		
-		aim_x = aim_x+aiming.direction*-1		
+		aiming.x = aiming.x+aiming.direction*-1
 		
 		if abs(aiming.direction) < aiming.full then
 			if aiming.direction < 0 then
@@ -140,7 +140,7 @@ function draw_aim()
 	draw_goal_top()
 	if ball.inplace then
 		--aiming line
-		line(aim_x,26,ball.x,ball.y,1)
+		line(aiming.x,26,ball.x,ball.y,1)
 	end
 	--ball
 	if not ball.inplace
@@ -209,7 +209,7 @@ function draw_kick()
 	--goal top
 	draw_goal_top()
 	--aiming line
-	line(aim_x,26,ball.x,ball.y,1)
+	line(aiming.x,26,ball.x,ball.y,1)
 	--ball
 	fillp(ball.smallp)
 	circfill(ball.x,ball.y,ball.r,ball.col)
@@ -230,7 +230,7 @@ function draw_kick()
 	
 	--debug
 	color(7)
-	print(aim_x)
+	print(aiming.x)
 	print(tostr(kicking.started)..","..tostr(kicking.ended))
 	print(kicking.stren)
 	color()
@@ -275,45 +275,56 @@ end
 
 function _init()
 	mode = "start"
+	xdown = false
+	fresh = true
+	
 	timer = {
 		frames = 0
 	}
-	xdown = false
-	fresh = true
-	player = {}
-	kicking = {}
-	aiming = {}
-	hint = {}
-	ball = {}
-	player.x = 59
-	player.y = 113
-	player.runin = 30
-	aiming.direction = 0.1
-	aiming.full = 6
-	aiming.started = false
-	aiming.ended = false
-	aim_x = 62
-	kicking.started = false
-	kicking.ended = false
-	kicking.stren = 0
-	kicking.full = 62
-	kicking.velo = 0.1
-	kicking.bary = 124
-	hint.colors = {7,6,5,5,6}
-	hint.colpos = 1
-	hint.txtcol = hint.colors[1]
-	hint.blinktimer = 0
-	ball.r = 2
-	ball.x = flr(rnd(110))
-	ball.y = 130
-	ball.ty = 60+flr(rnd(45))
-	ball.inplace = false
-	ball.col = 0x57
-	ball.bigp = 0b0011001111001100
-	ball.bigp2 = 0b1100110000110011
-	ball.smallp = 0b0101101001011010
-	ball.smallp2 = 0b1010010110100101
-	ball.pat = ball.smallp
+	
+	player = {
+		x = 59,
+		y = 113,
+		runin = 30
+	}
+	
+	aiming = {
+		direction = 0.1,
+		full = 6,
+		started = false,
+		ended = false,
+		x = 62
+	}
+	
+	kicking = {
+		started = false,
+		ended = false,
+		stren = 0,
+		full = 62,
+		velo = 0.1,
+		bary = 124
+	}
+	
+	ball = {
+		r = 2,
+		x = flr(rnd(110)),
+		y = 130,
+		ty = 60+flr(rnd(45)),
+		inplace = false,
+		col = 0x57,
+		bigp = 0b0011001111001100,
+		bigp2 = 0b1100110000110011,
+		smallp = 0b0101101001011010,
+		smallp2 = 0b1010010110100101,
+		pat = nil
+	}
+	
+	hint = {
+		colors = {7,6,5,5,6},
+		colpos = 1,
+		txtcol = nil,
+		blinktimer = 0
+	}
 end
 
 __gfx__
