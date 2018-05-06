@@ -174,62 +174,91 @@ end
 function update_kick()
 	xdown = btn(5)	
 	check_fresh()
-	
+
 	if xdown and not fresh then
 		kicking.started = true
 	end
-	
+
 	if not xdown
 				and kicking.started then
 		kicking.ended = true
 	end
-	
+
 	if kicking.started
 		and not kicking.ended then
-		
+
 		kicking.stren+=kicking.velo
 		kicking.bary-=kicking.velo
 		kicking.velo+=0.1
+
 		if kicking.velo >=2.5 then
 			kicking.velo = 2.5
 		end
-		
+
 		if kicking.stren >= kicking.full then
 			kicking.bary = kicking.full
 			kicking.ended = true
 		end	
+	end
+
+	if kicking.ended then
+		if kicking.stren >= 60 then
+			shot.overshot = true
+			shot.miss = true
+			ball.minx = -4
+		end
+
+		if player.y > ball.y
+					and not player.fixed then
+			player.y -= 1
+		elseif ball.y > ball.miny then
+			local ballspeed = kicking.stren/20
+			player.fixed = true
+			ball.y = mid(ball.miny,ball.y-ballspeed,127)
+			-- todo: x position
+		end
 	end
 end
 
 function draw_kick()
 	local _y = kicking.bary
 	--goal top
+	if shot.overshot then
+		--ball
+		fillp(ball.smallp)
+		circfill(ball.x,ball.y,ball.r,ball.col)
+		fillp()
+	end
 	draw_goal_top()
 	--aiming line
 	line(aiming.x,26,ball.x,ball.y,1)
-	--ball
-	fillp(ball.smallp)
-	circfill(ball.x,ball.y,ball.r,ball.col)
-	fillp()
+	if not shot.overshot then
+		--ball
+		fillp(ball.smallp)
+		circfill(ball.x,ball.y,ball.r,ball.col)
+		fillp()
+	end
 	--player
 	spr(1,player.x,player.y,1,1)
 	pal(8,1)
 	--goalie
 	spr(1,49,2,2,2,1,1)
 	pal()
-	
+
 	-- strength bar
 	rectfill(122,60,125,125,7)
 	rectfill(123,61,124,124,10)
 	rectfill(123,61,124,71,9)
 	rectfill(123,61,124,63,8)
 	line(121,_y,126,_y,1)
-	
+
 	--debug
 	color(7)
-	print(aiming.x)
-	print(tostr(kicking.started)..","..tostr(kicking.ended))
-	print(kicking.stren)
+	--print(player.y)
+	--print(kicking.ended)
+	--print(aiming.x)
+	--print(tostr(kicking.started)..","..tostr(kicking.ended))
+	--print(kicking.stren)
 	color()
 	--/debug
 end
@@ -282,7 +311,8 @@ function _init()
 	player = {
 		x = 59,
 		y = 113,
-		runin = 30
+		runin = 30,
+		fixed = false
 	}
 	
 	aiming = {
@@ -304,6 +334,7 @@ function _init()
 	
 	ball = {
 		r = 2,
+		miny = 3,
 		x = mid(6,flr(rnd(110)),110),
 		y = 130,
 		ty = 60+flr(rnd(50)),
@@ -316,6 +347,11 @@ function _init()
 		pat = nil
 	}
 	
+	shot = {
+		miss = false,
+		overshot = false
+	}
+
 	hint = {
 		colors = {7,6,5,5,6},
 		colpos = 1,
