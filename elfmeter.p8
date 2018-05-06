@@ -89,7 +89,7 @@ function update_aim()
 	if ball.y > ball.ty then
 		ball.y-=1
 		player.y = ball.y+player.runin
-	elseif player.runin > 5 then
+	elseif player.runin > 10 then
 		player.runin -= 1
 		player.y = ball.y+player.runin
 	else
@@ -167,9 +167,6 @@ function draw_aim()
 		rectfill(0,0,127,12,7)
 		print("halte [x] um zu zielen",22,4,hint.txtcol)
 	end
-	
-	print(ball.y..", "..ball.ty,5,120,7)
-
 end
 -->8
 --kick
@@ -307,9 +304,9 @@ function _init()
 	
 	ball = {
 		r = 2,
-		x = flr(rnd(110)),
+		x = mid(6,flr(rnd(110)),110),
 		y = 130,
-		ty = 60+flr(rnd(45)),
+		ty = 60+flr(rnd(50)),
 		inplace = false,
 		col = 0x57,
 		bigp = 0b0011001111001100,
