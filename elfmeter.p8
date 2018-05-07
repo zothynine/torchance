@@ -223,7 +223,7 @@ end
 function draw_kick()
 	local _y = kicking.bary
 	--goal top
-	if shot.overshot then
+	if not shot.overshot then
 		--ball
 		fillp(ball.smallp)
 		circfill(ball.x,ball.y,ball.r,ball.col)
@@ -232,7 +232,7 @@ function draw_kick()
 	draw_goal_top()
 	--aiming line
 	line(aiming.x,26,ball.x,ball.y,1)
-	if not shot.overshot then
+	if shot.overshot then
 		--ball
 		fillp(ball.smallp)
 		circfill(ball.x,ball.y,ball.r,ball.col)
