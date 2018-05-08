@@ -140,7 +140,7 @@ function draw_aim()
 	draw_goal_top()
 	if ball.inplace then
 		--aiming line
-		line(aiming.x,26,ball.x,ball.y,1)
+		line(aiming.x,3,ball.x,ball.y,1)
 	end
 	--ball
 	if not ball.inplace
@@ -212,10 +212,11 @@ function update_kick()
 					and not player.fixed then
 			player.y -= 1
 		elseif ball.y > ball.miny then
-			local ballspeed = kicking.stren/20
+			local ballspeed = kicking.stren/10
 			player.fixed = true
-			ball.y = mid(ball.miny,ball.y-ballspeed,127)
-			-- todo: x position
+			ball.ang = atan2(aiming.x-ball.x, ball.miny-ball.y)
+			ball.x = ball.x + ballspeed * cos(ball.ang)
+			ball.y = ball.y + ballspeed * sin(ball.ang)
 		end
 	end
 end
@@ -231,7 +232,7 @@ function draw_kick()
 	end
 	draw_goal_top()
 	--aiming line
-	line(aiming.x,26,ball.x,ball.y,1)
+	line(aiming.x,3,ball.x,ball.y,1)
 	if shot.overshot then
 		--ball
 		fillp(ball.smallp)
@@ -254,6 +255,9 @@ function draw_kick()
 
 	--debug
 	color(7)
+	print(ball.ang)
+	print(cos(ball.ang))
+	print(sin(ball.ang))
 	--print(player.y)
 	--print(kicking.ended)
 	--print(aiming.x)
@@ -336,6 +340,7 @@ function _init()
 		r = 2,
 		miny = 3,
 		x = mid(6,flr(rnd(110)),110),
+		dx = 1,
 		y = 130,
 		ty = 60+flr(rnd(50)),
 		inplace = false,
