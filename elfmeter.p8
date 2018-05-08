@@ -254,16 +254,16 @@ function draw_kick()
 	line(121,_y,126,_y,1)
 
 	--debug
-	color(7)
-	print(ball.ang)
-	print(cos(ball.ang))
-	print(sin(ball.ang))
+	--color(7)
+	--print(ball.ang)
+	--print(cos(ball.ang))
+	--print(sin(ball.ang))
 	--print(player.y)
 	--print(kicking.ended)
 	--print(aiming.x)
 	--print(tostr(kicking.started)..","..tostr(kicking.ended))
 	--print(kicking.stren)
-	color()
+	--color()
 	--/debug
 end
 
