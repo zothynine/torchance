@@ -44,6 +44,14 @@ function draw_goal_top()
 	rectfill(30,-1,95,8,0x07)
 	fillp()
 	rect(30,-1,95,8,7)
+	rect(19,-1,107,35,7)
+	--rect(6,-1,120,55,7)
+	line(0,64,127,64,7)
+	circfill(62,51,1,7)
+	local _r = 24
+	clip(62-_r,64,_r*2,_r)
+	circ(62,54,_r,7)
+	clip()
 end
 
 --juicyness
