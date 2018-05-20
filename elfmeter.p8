@@ -43,7 +43,7 @@ end
 function draw_hint(_txt,_doblink)
 	local _x = (128-(4*#_txt))/2
 	if (_doblink) blink_hint_txt()
-	rectfill(0,0,127,8,7)
+	rectfill(0,0,127,8,1)
 	print(_txt,_x,2,hint.txtcol)
 end
 
@@ -273,12 +273,12 @@ function draw_kick()
 	draw_score()
 	
 	if not kicking.started then
-		draw_hint("halte [x] um zu starten",true)
+		draw_hint("halte [x] um auszuholen",true)
 	end
 	
 	if kicking.started
 				and not kicking.ended then
-		draw_hint("lass [x] rechtzeitig los!",true)
+		draw_hint("lass los um zu kicken!",true)
 	end
 
 end
@@ -374,7 +374,7 @@ function _init()
 	}
 
 	hint = {
-		colors = {7,6,5,5,6},
+		colors = {5,6,7,7,6},
 		colpos = 1,
 		txtcol = nil,
 		blinktimer = 0
