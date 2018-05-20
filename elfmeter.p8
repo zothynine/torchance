@@ -37,7 +37,8 @@ end
 
 function draw_score()
 	rectfill(0,0,127,8,1)
-	print("ball:3/3 - gloas:0",4,2,7)
+	print("ball:3/3",4,2,7)
+	print("gloas:0",88,2,7)
 end
 
 function draw_hint(_txt,_doblink)
@@ -173,10 +174,10 @@ function draw_aim()
 	circfill(ball.x,ball.y,ball.r,ball.col)
 	fillp()
 	--player
-	spr(1,player.x,player.y,1,1)
+	sspr(8,0,7,5,player.x,player.y)
 	pal(8,1)
 	--goalie
-	spr(1,49,ball.miny,2,2,1,1)
+	sspr(8,0,7,5,60,ball.miny+goalie.yoff)
 	pal()
 	
 	--show aiming hint
@@ -261,7 +262,7 @@ function draw_kick()
 	sspr(8,0,7,5,player.x,player.y)
 	pal(8,1)
 	--goalie
-	sspr(8,0,7,5,49,ball.miny,2,2)
+	sspr(8,0,7,5,60,ball.miny+goalie.yoff)
 	pal()
 
 	-- strength bar
@@ -333,6 +334,10 @@ function _init()
 		y = 113,
 		runin = 30,
 		fixed = false
+	}
+	
+	goalie = {
+		yoff = 10
 	}
 	
 	aiming = {
