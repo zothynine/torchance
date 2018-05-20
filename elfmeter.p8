@@ -235,7 +235,8 @@ function update_kick()
 			player.fixed = true
 			ball.ang = atan2(aiming.x-ball.x, ball.miny-ball.y)
 			ball.x = ball.x + ballspeed * cos(ball.ang)
-			ball.y = ball.y + ballspeed * sin(ball.ang)
+			ball.y = ball.y + ballspeed * sin(ball.ang)			
+			if (ball.y < ball.miny) ball.y = ball.miny 
 		end
 	end
 end
