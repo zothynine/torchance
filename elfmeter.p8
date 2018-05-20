@@ -35,15 +35,27 @@ function check_fresh()
 	end
 end
 
+function draw_score()
+	rectfill(0,0,127,8,1)
+	print("ball:3/3 - gloas:0",4,2,7)
+end
+
+function draw_hint(_txt,_doblink)
+	local _x = (128-(4*#_txt))/2
+	if (_doblink) blink_hint_txt()
+	rectfill(0,0,127,8,7)
+	print(_txt,_x,2,hint.txtcol)
+end
+
 function draw_grass()
 	map(0,0,0,0,16,16)
 end
 
 function draw_goal_top()
 	fillp(0b0011001111001100.1)
-	rectfill(30,-1,95,8,0x07)
+	rectfill(30,-1,95,16,0x07)
 	fillp()
-	rect(30,-1,95,8,7)
+	rect(30,-1,95,16,7)
 	rect(19,-1,107,35,7)
 	--rect(6,-1,120,55,7)
 	line(0,64,127,64,7)
@@ -83,9 +95,7 @@ end
 
 function draw_start()
 	--show start hint
-	blink_hint_txt()
-	rectfill(0,60,127,72,7)
-	print("starten mit [x]",34,64,hint.txtcol)
+	draw_hint("starten mit [x]",true)
 end
 -->8
 --aim
@@ -148,7 +158,7 @@ function draw_aim()
 	draw_goal_top()
 	if ball.inplace then
 		--aiming line
-		line(aiming.x,3,ball.x,ball.y,1)
+		line(aiming.x,ball.miny,ball.x,ball.y,1)
 	end
 	--ball
 	if not ball.inplace
@@ -166,14 +176,14 @@ function draw_aim()
 	spr(1,player.x,player.y,1,1)
 	pal(8,1)
 	--goalie
-	spr(1,49,2,2,2,1,1)
+	spr(1,49,ball.miny,2,2,1,1)
 	pal()
 	
 	--show aiming hint
 	if ball.inplace and not aiming.started then
-	 blink_hint_txt()
-		rectfill(0,0,127,12,7)
-		print("halte [x] um zu zielen",22,4,hint.txtcol)
+		draw_hint("halte [x] um zu zielen",true)
+	else
+		draw_score()
 	end
 end
 -->8
@@ -240,7 +250,7 @@ function draw_kick()
 	end
 	draw_goal_top()
 	--aiming line
-	line(aiming.x,3,ball.x,ball.y,1)
+	line(aiming.x,ball.miny,ball.x,ball.y,1)
 	if shot.overshot then
 		--ball
 		fillp(ball.smallp)
@@ -251,7 +261,7 @@ function draw_kick()
 	spr(1,player.x,player.y,1,1)
 	pal(8,1)
 	--goalie
-	spr(1,49,2,2,2,1,1)
+	spr(1,49,ball.miny,2,2,1,1)
 	pal()
 
 	-- strength bar
@@ -260,19 +270,17 @@ function draw_kick()
 	rectfill(123,61,124,71,9)
 	rectfill(123,61,124,63,8)
 	line(121,_y,126,_y,1)
+	draw_score()
+	
+	if not kicking.started then
+		draw_hint("halte [x] um zu starten",true)
+	end
+	
+	if kicking.started
+				and not kicking.ended then
+		draw_hint("lass [x] rechtzeitig los!",true)
+	end
 
-	--debug
-	--color(7)
-	--print(ball.ang)
-	--print(cos(ball.ang))
-	--print(sin(ball.ang))
-	--print(player.y)
-	--print(kicking.ended)
-	--print(aiming.x)
-	--print(tostr(kicking.started)..","..tostr(kicking.ended))
-	--print(kicking.stren)
-	--color()
-	--/debug
 end
 
 -->8
@@ -346,7 +354,7 @@ function _init()
 	
 	ball = {
 		r = 2,
-		miny = 3,
+		miny = 12,
 		x = mid(6,flr(rnd(110)),110),
 		dx = 1,
 		y = 130,
