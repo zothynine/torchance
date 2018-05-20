@@ -258,10 +258,10 @@ function draw_kick()
 		fillp()
 	end
 	--player
-	spr(1,player.x,player.y,1,1)
+	sspr(8,0,7,5,player.x,player.y)
 	pal(8,1)
 	--goalie
-	spr(1,49,ball.miny,2,2,1,1)
+	sspr(8,0,7,5,49,ball.miny,2,2)
 	pal()
 
 	-- strength bar
