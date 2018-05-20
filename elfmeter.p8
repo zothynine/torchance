@@ -38,7 +38,7 @@ end
 function draw_score()
 	rectfill(0,0,127,8,1)
 	print("ball:3/3",4,2,7)
-	print("gloas:0",88,2,7)
+	print("goals:0",88,2,7)
 end
 
 function draw_hint(_txt,_doblink)
