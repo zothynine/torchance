@@ -241,8 +241,19 @@ function update_kick()
 			player.fixed = true
 			ball.ang = atan2(aiming.x-ball.x, ball.miny-ball.y)
 			ball.x = ball.x + ballspeed * cos(ball.ang)
-			ball.y = ball.y + ballspeed * sin(ball.ang)			
-			if (ball.y < ball.miny) ball.y = ball.miny 
+			ball.y = ball.y + ballspeed * sin(ball.ang)
+			if (ball.y < ball.miny) ball.y = ball.miny
+		else
+			if shot.overshot then
+ 			trys -= 1
+ 		else
+ 			goals += 1
+ 		end
+ 		if trys == 0 then
+ 			reset_game("gameover")
+ 		else
+ 			reset_game("aim")
+ 		end
 		end
 	end
 end
@@ -288,11 +299,16 @@ function draw_kick()
 				and not kicking.ended then
 		draw_hint("lass los um zu kicken!",true)
 	end
-
 end
 
 -->8
---4
+--game over
+function update_gameover()
+end
+
+function draw_gameover()
+	draw_hint("game over",false)
+end
 -->8
 --5
 -->8
@@ -312,6 +328,8 @@ function _update60()
 		update_aim()
 	elseif mode == "kick" then
 		update_kick()
+	elseif mode == "gameover" then
+		update_gameover()
 	end
 end
 
@@ -324,15 +342,23 @@ function _draw()
 		draw_aim()
 	elseif mode == "kick" then
 		draw_kick()
+	elseif mode == "gameover" then
+		draw_gameover()
 	end
 end
 
+function reset_game(_mode)
+	mode = _mode
+ _init()
+end
+
+mode = "start"
+trys = 3
+goals = 0
+
 function _init()
-	mode = "start"
 	xdown = false
 	fresh = true
-	trys = 3
-	goals = 0
 	
 	timer = {
 		frames = 0
@@ -384,13 +410,14 @@ function _init()
 	
 	shot = {
 		miss = false,
-		overshot = false
+		overshot = false,
+		done = false
 	}
 
 	hint = {
 		colors = {5,6,7,7,6},
 		colpos = 1,
-		txtcol = nil,
+		txtcol = 7,
 		blinktimer = 0
 	}
 end
