@@ -41,11 +41,15 @@ function draw_score()
 	print("tore:"..goals,88,2,7)
 end
 
-function draw_hint(_txt,_doblink)
-	local _x = (128-(4*#_txt))/2
+function draw_hint(_txt,_doblink,_y)
+	local x = (128-(4*#_txt))/2
+	local y = 0
+	local col = hint.fixedcol
+	if (_doblink) col = hint.txtcol
+	if (_y ~= nil) y = _y
 	if (_doblink) blink_hint_txt()
-	rectfill(0,0,127,8,1)
-	print(_txt,_x,2,hint.txtcol)
+	rectfill(0,y,127,y+8,1)
+	print(_txt,x,y+2,col)
 end
 
 function draw_grass()
@@ -304,10 +308,19 @@ end
 -->8
 --game over
 function update_gameover()
+	trys = 3
+	goals = 0
+	if btnp(5) then
+		reset_game("aim")
+	elseif btnp(4) then
+		reset_game("start")
+	end
 end
 
 function draw_gameover()
 	draw_hint("game over",false)
+	draw_hint("versuche es nochmal ❎",true,60)
+	draw_hint("zum start mit [c]",false,68)
 end
 -->8
 --5
@@ -351,10 +364,6 @@ function reset_game(_mode)
 	mode = _mode
  _init()
 end
-
-mode = "start"
-trys = 3
-goals = 0
 
 function _init()
 	xdown = false
@@ -415,12 +424,17 @@ function _init()
 	}
 
 	hint = {
+		fixedcol = 7,
 		colors = {5,6,7,7,6},
 		colpos = 1,
 		txtcol = 7,
 		blinktimer = 0
 	}
 end
+
+mode = "start"
+trys = 3
+goals = 0
 
 __gfx__
 000000000555500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000033333333bbbbbbbb
