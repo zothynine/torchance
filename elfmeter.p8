@@ -179,12 +179,18 @@ function draw_aim()
 	--goalie
 	sspr(8,0,7,5,60,ball.miny+goalie.yoff)
 	pal()
+	draw_score()
 	
 	--show aiming hint
-	if ball.inplace and not aiming.started then
+	if ball.inplace
+				and not aiming.started then
 		draw_hint("halte [x] um zu zielen",true)
-	else
-		draw_score()
+	end
+	
+	if ball.inplace
+				and aiming.started
+				and not aiming.ended then
+		draw_hint("loslassen um zu fixieren",true)
 	end
 end
 -->8
