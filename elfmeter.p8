@@ -233,7 +233,7 @@ function update_kick()
 	if kicking.ended then
 		if kicking.stren >= 60 then
 			shot.overshot = true
-			shot.miss = true
+			shot.missed = true
 			ball.minx = -4
 		end
 
@@ -248,16 +248,24 @@ function update_kick()
 			ball.y = ball.y + ballspeed * sin(ball.ang)
 			if (ball.y < ball.miny) ball.y = ball.miny
 		else
-			if shot.overshot then
- 			trys -= 1
- 		else
- 			goals += 1
- 		end
- 		if trys == 0 then
- 			reset_game("gameover")
- 		else
- 			reset_game("aim")
- 		end
+			--after kicking
+			--start timer for showing hint
+			if timer.wait < 120 then
+				timer.wait+=1
+			else
+				timer.wait=0
+				--update game mode
+ 			if shot.missed then
+  			trys -= 1
+  		else
+  			goals += 1
+  		end
+  		if trys == 0 then
+  			reset_game("gameover")
+  		else
+  			reset_game("aim")
+  		end
+			end
 		end
 	end
 end
@@ -302,6 +310,18 @@ function draw_kick()
 	if kicking.started
 				and not kicking.ended then
 		draw_hint("lass los um zu kicken!",true)
+	end
+	
+	--hint after kicking
+	if kicking.ended
+				and timer.wait > 0 then
+		local _goaltxt = "tooooor!"
+		if shot.overshot then
+			_goaltxt = "zu viel power - ueber das tor!"
+		elseif shot.missed then
+			_goaltxt = "daneben!"
+		end
+		draw_hint(_goaltxt,false,60)
 	end
 end
 
@@ -370,7 +390,8 @@ function _init()
 	fresh = true
 	
 	timer = {
-		frames = 0
+		frames = 0,
+		wait = 0
 	}
 	
 	player = {
@@ -418,7 +439,7 @@ function _init()
 	}
 	
 	shot = {
-		miss = false,
+		missed = false,
 		overshot = false,
 		done = false
 	}
@@ -435,7 +456,6 @@ end
 mode = "start"
 trys = 3
 goals = 0
-
 __gfx__
 000000000555500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000033333333bbbbbbbb
 000000000555550000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000033333333bbbbbbbb
