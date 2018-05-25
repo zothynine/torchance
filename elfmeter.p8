@@ -249,7 +249,23 @@ function update_kick()
 			if (ball.y < ball.miny) ball.y = ball.miny
 		else
 			--after kicking
-			--start timer for showing hint
+			--find out if missed
+			if ball.y < 16 then
+				if ball.x == 30
+							or ball.x == 95 then
+						shot.outside = false
+						shot.overshot = false
+						shot.pole = true
+						shot.missed = true
+				elseif ball.x < 30
+							or ball.x > 95 then
+						shot.outside = true
+						shot.overshot = false
+						shot.pole = false
+						shot.missed = true
+				end
+			end
+			--start hint timer
 			if timer.wait < 120 then
 				timer.wait+=1
 			else
@@ -316,11 +332,17 @@ function draw_kick()
 	if kicking.ended
 				and timer.wait > 0 then
 		local _goaltxt = "tooooor!"
-		if shot.overshot then
-			_goaltxt = "zu viel power - ueber das tor!"
-		elseif shot.missed then
-			_goaltxt = "daneben!"
-		end
+		
+		if shot.missed then
+ 		if shot.outside then
+ 			_goaltxt = "daneben!"
+ 		elseif shot.pole then
+ 			_goaltxt = "stange!"
+ 		elseif shot.overshot then
+ 			_goaltxt = "zu viel power - ueber das tor!"
+ 		end
+		end	
+	
 		draw_hint(_goaltxt,false,60)
 	end
 end
@@ -441,6 +463,8 @@ function _init()
 	shot = {
 		missed = false,
 		overshot = false,
+		outside = false,
+		pole = false,
 		done = false
 	}
 
