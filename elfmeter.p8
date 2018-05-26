@@ -184,7 +184,7 @@ function draw_aim()
 	sspr(8,0,7,5,player.x,player.y)
 	pal(8,1)
 	--goalie
-	sspr(8,0,7,5,60,ball.miny+goalie.yoff)
+	sspr(8,0,7,5,60,goalie.y)
 	pal()
 	draw_score()
 	
@@ -311,7 +311,7 @@ function draw_kick()
 	sspr(8,0,7,5,player.x,player.y)
 	pal(8,1)
 	--goalie
-	sspr(8,0,7,5,60,ball.miny+goalie.yoff)
+	sspr(8,0,7,5,60,goalie.y)
 	pal()
 
 	-- strength bar
@@ -427,7 +427,7 @@ function _init()
 	}
 	
 	goalie = {
-		yoff = 10
+		y = 22
 	}
 	
 	aiming = {
