@@ -242,32 +242,49 @@ function update_kick()
 
 		if player.y > ball.y
 					and not player.fixed then
+
 			player.y -= 1
+
 		elseif ball.y > ball.miny then
+
 			local ballspeed = kicking.stren/10
 			player.fixed = true
 			ball.ang = atan2(aiming.x-ball.x, ball.miny-ball.y)
 			ball.x = ball.x + ballspeed * cos(ball.ang)
 			ball.y = ball.y + ballspeed * sin(ball.ang)
 			if (ball.y < ball.miny) ball.y = ball.miny
+
 		else
+			
 			--after kicking
-			--find out if missed
+			--find out if catched or missed
+			
 			if ball.y < 16 then
-				if ball.x == 30
+			
+ 			if flr(ball.y)==flr(goalie.y) then
+ 						--and ball.x>=golie.x
+ 						--and ball.x <= goalie.x+7 then
+ 					ball.miny = ball.y
+ 					goalie.catch = true				
+
+				elseif ball.x == 30
 							or ball.x == 95 then
+
 						shot.outside = false
 						shot.overshot = false
 						shot.pole = true
 						shot.missed = true
+			
 				elseif ball.x < 30
 							or ball.x > 95 then
+			
 						shot.outside = true
 						shot.overshot = false
 						shot.pole = false
 						shot.missed = true
 				end
 			end
+			
 			--start hint timer
 			if timer.wait < 120 then
 				timer.wait+=1
@@ -336,6 +353,10 @@ function draw_kick()
 				and timer.wait > 0 then
 		local _goaltxt = "tooooor!"
 		
+		if goalie.catch then
+			_goaltxt = "gehalten!"
+		end
+		
 		if shot.missed then
  		if shot.outside then
  			_goaltxt = "daneben!"
@@ -348,6 +369,10 @@ function draw_kick()
 	
 		draw_hint(_goaltxt,false,60)
 	end
+	
+	--debug
+	print(flr(ball.y)..":"..flr(goalie.y)..":"..tostr(goalie.catch),5,30,1)
+	
 end
 
 -->8
@@ -427,7 +452,8 @@ function _init()
 	}
 	
 	goalie = {
-		y = 22
+		y = 22,
+		catch = false
 	}
 	
 	aiming = {
