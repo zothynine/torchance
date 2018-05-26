@@ -38,6 +38,23 @@ function check_fresh()
 	end
 end
 
+function check_catch()
+		_bx = ball.x
+		_by = ball.y-ball.r
+		_gx = goalie.x
+		_gy = goalie.y+5
+		
+		if _by <= _gy
+					and not shot.overshot then
+			if _bx >= _gx
+						and _bx <= _gx+7 then
+				ball.miny = goalie.y+6
+				goalie.catch = true
+				goalie.x = ball.x-ball.r
+			end
+		end
+end
+
 function draw_score()
 	rectfill(0,0,127,8,1)
 	print("chance:"..trys,4,2,7)
@@ -159,12 +176,16 @@ function update_aim()
 		fresh = true
 		mode = "kick"
 	end
+	
+	if ball.inplace then
+		aiming.draw = true
+	end
 end
 
 function draw_aim()
 	--goal top
 	draw_goal_top()
-	if ball.inplace then
+	if aiming.draw then	
 		--aiming line
 		line(aiming.x,ball.miny,ball.x,ball.y,1)
 	end
@@ -184,7 +205,7 @@ function draw_aim()
 	sspr(8,0,7,5,player.x,player.y)
 	pal(8,1)
 	--goalie
-	sspr(8,0,7,5,60,goalie.y)
+	sspr(8,0,7,5,goalie.x,goalie.y)
 	pal()
 	draw_score()
 	
@@ -253,12 +274,7 @@ function update_kick()
 			ball.x = ball.x + ballspeed * cos(ball.ang)
 			ball.y = ball.y + ballspeed * sin(ball.ang)
 			
- 			if flr(ball.y-3)<=flr(goalie.y+4) then
- 						--and ball.x>=golie.x
- 						--and ball.x <= goalie.x+7 then
- 					ball.miny = ball.y
- 					goalie.catch = true
- 			end
+			check_catch()
 
 			if (ball.y < ball.miny) ball.y = ball.miny
 
@@ -266,6 +282,7 @@ function update_kick()
 			
 			--after kicking
 			--find out if catched or missed
+			aiming.draw = false
 			if ball.y < 16 then
 
 				if ball.x == 30
@@ -318,7 +335,10 @@ function draw_kick()
 	end
 	draw_goal_top()
 	--aiming line
-	line(aiming.x,ball.miny,ball.x,ball.y,1)
+	if aiming.draw then
+		line(aiming.x,ball.miny,ball.x,ball.y,1)
+	end
+	
 	if shot.overshot then
 		--ball
 		fillp(ball.smallp)
@@ -329,7 +349,7 @@ function draw_kick()
 	sspr(8,0,7,5,player.x,player.y)
 	pal(8,1)
 	--goalie
-	sspr(8,0,7,5,60,goalie.y)
+	sspr(8,0,7,5,goalie.x,goalie.y)
 	pal()
 
 	-- strength bar
@@ -370,10 +390,6 @@ function draw_kick()
 	
 		draw_hint(_goaltxt,false,60)
 	end
-	
-	--debug
-	print(flr(ball.y)..":"..flr(goalie.y)..":"..tostr(goalie.catch),5,30,1)
-	
 end
 
 -->8
@@ -453,6 +469,7 @@ function _init()
 	}
 	
 	goalie = {
+		x = 60,
 		y = 22,
 		catch = false
 	}
@@ -462,7 +479,8 @@ function _init()
 		full = 6,
 		started = false,
 		ended = false,
-		x = 62
+		x = 62,
+		draw = false
 	}
 	
 	kicking = {
