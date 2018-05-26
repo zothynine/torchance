@@ -17,6 +17,9 @@ __lua__
 --  - start screen
 --		- screen setup
 				
+--  - powerups
+--				- hatrick
+
 --  - juicyness
 --    - fade out on mode change
 --				- particles
