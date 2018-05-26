@@ -252,22 +252,23 @@ function update_kick()
 			ball.ang = atan2(aiming.x-ball.x, ball.miny-ball.y)
 			ball.x = ball.x + ballspeed * cos(ball.ang)
 			ball.y = ball.y + ballspeed * sin(ball.ang)
+			
+ 			if flr(ball.y-3)<=flr(goalie.y+4) then
+ 						--and ball.x>=golie.x
+ 						--and ball.x <= goalie.x+7 then
+ 					ball.miny = ball.y
+ 					goalie.catch = true
+ 			end
+
 			if (ball.y < ball.miny) ball.y = ball.miny
 
 		else
 			
 			--after kicking
 			--find out if catched or missed
-			
 			if ball.y < 16 then
-			
- 			if flr(ball.y)==flr(goalie.y) then
- 						--and ball.x>=golie.x
- 						--and ball.x <= goalie.x+7 then
- 					ball.miny = ball.y
- 					goalie.catch = true				
 
-				elseif ball.x == 30
+				if ball.x == 30
 							or ball.x == 95 then
 
 						shot.outside = false
