@@ -38,12 +38,29 @@ function check_fresh()
 	end
 end
 
+function goalie_action()
+	local _gxf = flr(goalie.x)
+	local _axf = flr(aiming.x)
+	
+	--catch slow ball
+	if kicking.stren < 20 then
+		
+ 		--follow slow ball
+ 		if goalie.x > ball.x then
+ 			goalie.x -= 1
+ 		elseif goalie.x < ball.x then
+ 			goalie.x += 1
+ 		end
+
+	end
+end
+
 function check_catch()
-		_bx = ball.x
-		_by = ball.y-ball.r
-		_gx = goalie.x
-		_gy = goalie.y+5
-		_lvl = goalielvl
+		local _bx = ball.x
+		local _by = ball.y-ball.r
+		local _gx = goalie.x
+		local _gy = goalie.y+5
+		local _lvl = goalielvl
 		
 		if _by <= _gy
 					and not shot.overshot then
@@ -275,7 +292,8 @@ function update_kick()
 			ball.ang = atan2(aiming.x-ball.x, ball.miny-ball.y)
 			ball.x = ball.x + ballspeed * cos(ball.ang)
 			ball.y = ball.y + ballspeed * sin(ball.ang)
-			
+
+			goalie_action()
 			check_catch()
 
 			if (ball.y < ball.miny) ball.y = ball.miny
@@ -295,8 +313,8 @@ function update_kick()
 						shot.pole = true
 						shot.missed = true
 			
-				elseif ball.x < 30
-							or ball.x > 95 then
+				elseif ball.x < 28
+							or ball.x > 97 then
 			
 						shot.outside = true
 						shot.overshot = false
