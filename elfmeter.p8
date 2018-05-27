@@ -43,11 +43,12 @@ function check_catch()
 		_by = ball.y-ball.r
 		_gx = goalie.x
 		_gy = goalie.y+5
+		_lvl = goalielvl
 		
 		if _by <= _gy
 					and not shot.overshot then
-			if _bx >= _gx
-						and _bx <= _gx+7 then
+			if _bx >= _gx-_lvl
+						and _bx <= _gx+6+_lvl then
 				ball.miny = goalie.y+6
 				goalie.catch = true
 				goalie.x = ball.x-ball.r
@@ -58,6 +59,7 @@ end
 function draw_score()
 	rectfill(0,0,127,8,1)
 	print("chance:"..trys,4,2,7)
+	print("lvl:"..goalielvl,54,2,7)
 	print("tore:"..goals,88,2,7)
 end
 
@@ -313,6 +315,7 @@ function update_kick()
   			trys -= 1
   		else
   			goals += 1
+  			goalielvl += 1
   		end
   		if trys == 0 then
   			reset_game("gameover")
@@ -390,6 +393,11 @@ function draw_kick()
 	
 		draw_hint(_goaltxt,false,60)
 	end
+
+	--debug
+	pset(goalie.x-goalielvl,16,8)
+	pset(goalie.x+6+goalielvl,16,8)
+
 end
 
 -->8
@@ -471,7 +479,7 @@ function _init()
 	goalie = {
 		x = 60,
 		y = 22,
-		catch = false
+		catch = false,
 	}
 	
 	aiming = {
@@ -528,6 +536,7 @@ end
 mode = "start"
 trys = 3
 goals = 0
+goalielvl = 0
 __gfx__
 000000000555500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000033333333bbbbbbbb
 000000000555550000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000033333333bbbbbbbb
