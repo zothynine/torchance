@@ -38,7 +38,7 @@ function check_fresh()
 	end
 end
 
-function goalie_action()
+function reactions()
 	local _gxf = flr(goalie.x)
 	local _axf = flr(aiming.x)
 	
@@ -293,7 +293,7 @@ function update_kick()
 			ball.x = ball.x + ballspeed * cos(ball.ang)
 			ball.y = ball.y + ballspeed * sin(ball.ang)
 
-			goalie_action()
+			reactions()
 			check_catch()
 
 			if (ball.y < ball.miny) ball.y = ball.miny
