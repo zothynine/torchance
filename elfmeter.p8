@@ -413,8 +413,8 @@ function draw_kick()
 	end
 
 	--debug
-	pset(goalie.x-goalielvl,16,8)
-	pset(goalie.x+6+goalielvl,16,8)
+	pset(goalie.x-goalielvl,goalie.y+4,8)
+	pset(goalie.x+6+goalielvl,goalie.y+4,8)
 
 end
 
