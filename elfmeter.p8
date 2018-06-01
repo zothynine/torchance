@@ -333,7 +333,7 @@ function update_kick()
   			trys -= 1
   		else
   			goals += 1
-  			goalielvl += 1
+  			goalielvl = mid(0,goalielvl+2,20)
   		end
   		if trys == 0 then
   			reset_game("gameover")
