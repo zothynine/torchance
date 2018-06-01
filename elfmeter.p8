@@ -41,16 +41,28 @@ end
 function reactions()
 	local _gxf = flr(goalie.x)
 	local _axf = flr(aiming.x)
-	
+
+	if kicking.stren == 0 then	
+		shot.tooslow = true
+		shot.missed = true
+		kicking.stren = -1
+	end
+
 	--catch slow ball
+	if kicking.stren < 15 then
+		
+		--slow down ball
+		kicking.stren = mid(0,kicking.stren-0.1,kicking.stren)
+	end
+	
 	if kicking.stren < 20 then
 		
- 		--follow slow ball
- 		if goalie.x > ball.x then
- 			goalie.x -= 1
- 		elseif goalie.x < ball.x then
- 			goalie.x += 1
- 		end
+ 	--follow slow ball
+ 	if goalie.x > ball.x then
+ 		goalie.x -= 1
+ 	elseif goalie.x < ball.x then
+ 		goalie.x += 1
+ 	end
 
 	end
 end
@@ -284,8 +296,9 @@ function update_kick()
 					and not player.fixed then
 
 			player.y -= 1
-
-		elseif ball.y > ball.miny then
+		
+		elseif ball.y > ball.miny
+									and kicking.stren > -1 then
 
 			local ballspeed = kicking.stren/10
 			player.fixed = true
@@ -406,16 +419,20 @@ function draw_kick()
  			_goaltxt = "stange!"
  		elseif shot.overshot then
  			_goaltxt = "zu viel power - ueber das tor!"
+ 		elseif shot.tooslow then
+ 			_goaltxt = "zu wenig power!"
  		end
 		end	
 	
 		draw_hint(_goaltxt,false,60)
 	end
-
-	--debug
+	
+	--draw goalie skill pointers
 	pset(goalie.x-goalielvl,goalie.y+4,8)
 	pset(goalie.x+6+goalielvl,goalie.y+4,8)
 
+	--debug
+	print(kicking.stren,5,15,8)
 end
 
 -->8
@@ -539,6 +556,7 @@ function _init()
 		overshot = false,
 		outside = false,
 		pole = false,
+		tooslow = false,
 		done = false
 	}
 
