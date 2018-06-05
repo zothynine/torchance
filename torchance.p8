@@ -58,6 +58,7 @@ function reactions()
 	if kicking.stren < 20 then
 		
  	--follow slow ball
+ 	aiming.draw = false
  	if goalie.x > ball.x then
  		goalie.x -= 1
  	elseif goalie.x < ball.x then
