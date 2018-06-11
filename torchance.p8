@@ -179,7 +179,7 @@ function update_aim()
 		animate_player_sprite()
 	else
 		ball.inplace = true
-		player.spri = 2
+		player.spri = 1
 	end
 	
 	if ball.inplace then
