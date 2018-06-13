@@ -7,9 +7,6 @@ __lua__
 --todo:
 --		- score
 --	 -	kick screen
---    - goal or miss logic
---    - goal or miss painting
---    - kicking animation
 --				- ?bigger bar on start
 --				- random goalie actions
 
@@ -37,7 +34,30 @@ function check_fresh()
 	end
 end
 
-function reactions()
+function move_ball(down)
+ ball.speed = kicking.stren/10
+ _velx = ball.speed * cos(ball.ang)
+	_vely = ball.speed * sin(ball.ang)
+
+ if shot.done and not shot.missed then
+ 	if _velx < 0
+ 				and ball.x-ball.r <= 31 then
+ 				_velx = 0
+ 	elseif _velx < 0
+ 								and ball.x+ball.r >= 89 then
+ 				_velx = 0
+ 	end
+ end
+ 
+ if down then
+ 	_vely *= -1
+ end
+ 
+ ball.x += _velx
+ ball.y += _vely
+end
+
+function goalie_reactions()
 	local _gxf = flr(goalie.x)
 	local _axf = flr(aiming.x)
 
@@ -216,6 +236,7 @@ function update_aim()
 	
 	if aiming.ended then
 		fresh = true
+		ball.ang = atan2(aiming.x-ball.x, ball.miny-ball.y)
 		mode = "kick"
 	end
 	
@@ -309,15 +330,12 @@ function update_kick()
 			player.y -= 1
 		
 		elseif ball.y > ball.miny
-									and kicking.stren > -1 then
+									and kicking.stren > -1
+									and not shot.done then
 
-			local ballspeed = kicking.stren/10
 			player.fixed = true
-			ball.ang = atan2(aiming.x-ball.x, ball.miny-ball.y)
-			ball.x = ball.x + ballspeed * cos(ball.ang)
-			ball.y = ball.y + ballspeed * sin(ball.ang)
-
-			reactions()
+			move_ball(false)
+			goalie_reactions()
 			check_catch()
 
 			if (ball.y < ball.miny) ball.y = ball.miny
@@ -327,18 +345,22 @@ function update_kick()
 			--after kicking
 			--find out if catched or missed
 			aiming.draw = false
-			if ball.y < 16 then
+			if ball.y <= 16 and not shot.done then
+				shot.done = true
 
-				if ball.x == 30
-							or ball.x == 95 then
+				if (ball.x-ball.r <= gline.l
+								and ball.x+ball.r >= gline.l)
+							or (ball.x-ball.r <= gline.l
+											and ball.x+ball.r >= gline.r) then
 
 						shot.outside = false
 						shot.overshot = false
 						shot.pole = true
 						shot.missed = true
+						ball.speed = 2
 			
-				elseif ball.x < 28
-							or ball.x > 97 then
+				elseif ball.x-ball.r+1 < gline.l
+							or ball.x+ball.r+1 > gline.r then
 			
 						shot.outside = true
 						shot.overshot = false
@@ -350,6 +372,24 @@ function update_kick()
 			--start hint timer
 			if timer.wait < 120 then
 				timer.wait+=1
+			
+ 			--if shot.pole
+ 			--			and ball.speed > 0 then
+ 			--	ball.y += ball.speed
+ 			--	ball.speed -= 0.1
+ 			--end
+ 			
+ 			if shot.pole then
+ 				move_ball(true)
+ 			else
+ 				if shot.missed then
+ 					ball.miny = 0
+ 				end
+ 				if ball.y >= ball.miny then
+ 					move_ball(false)
+ 				end
+ 			end
+ 			
 			else
 				timer.wait=0
 				--update game mode
@@ -441,9 +481,6 @@ function draw_kick()
 	--draw goalie skill pointers
 	pset(goalie.x-goalielvl,goalie.y+4,8)
 	pset(goalie.x+6+goalielvl,goalie.y+4,8)
-
-	--debug
-	print(kicking.stren,5,15,8)
 end
 
 -->8
@@ -510,6 +547,12 @@ function _init()
 	xdown = false
 	fresh = true
 	
+	gline = {
+ 	y=16,
+ 	l=30,
+ 	r=95
+	}
+	
 	timer = {
 		frames = 0,
 		wait = 0
@@ -550,11 +593,11 @@ function _init()
 	
 	ball = {
 		r = 2,
-		miny = 12,
+		miny = 16,
 		x = mid(6,flr(rnd(110)),110),
-		dx = 1,
 		y = 130,
 		ty = 60+flr(rnd(50)),
+		speed = 0,
 		inplace = false,
 		col = 0x57,
 		bigp = 0b0011001111001100,
