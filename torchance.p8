@@ -7,12 +7,11 @@ __lua__
 --todo:
 --		- score
 --	 -	kick screen
---    - kicking animation
 --    - goal or miss logic
 --    - goal or miss painting
+--    - kicking animation
 --				- ?bigger bar on start
 --				- random goalie actions
---				- learning goalie
 
 --  - start screen
 --		- screen setup
