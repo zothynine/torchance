@@ -108,7 +108,7 @@ end
 function draw_score()
 	rectfill(0,0,127,8,1)
 	print("chance:"..trys,4,2,7)
-	print("lvl:"..goalielvl,54,2,7)
+--	print("goalielvl:"..goalielvl,40,2,7)
 	print("tore:"..goals,88,2,7)
 end
 
@@ -191,6 +191,7 @@ function update_aim()
 	
 	if ball.y > ball.ty then
 		ball.y-=1
+		aiming.x = ball.x
 		player.y = ball.y+player.runin
 		animate_player_sprite()
 	elseif player.runin > 10 then
@@ -541,6 +542,9 @@ end
 
 function reset_game(_mode)
 	mode = _mode
+	if _mode == "gameover" then
+		goalielvl = 0
+	end
  _init()
 end
 
