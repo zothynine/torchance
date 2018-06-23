@@ -204,6 +204,7 @@ function update_aim()
 		player.x = ball.x-3
 	
 	if ball.y > ball.ty then
+		ball.r = mid(2,ball.y-ball.ty,4)
 		ball.y-=1
 		aiming.x = ball.x
 		player.y = ball.y+player.runin
@@ -213,6 +214,7 @@ function update_aim()
 		player.y = ball.y+player.runin
 		animate_player_sprite()
 	else
+		ball.r = 2
 		ball.inplace = true
 		player.spri = 1
 	end
@@ -271,12 +273,29 @@ function draw_aim()
 	--ball
 	if not ball.inplace
 				and timer.frames%6 == 0 then
- 	if ball.pat == ball.smallp then
- 		ball.pat = ball.smallp2
- 	else
- 		ball.pat = ball.smallp
+ 	
+  if ball.r > 2 then
+  
+  	if ball.pat == ball.bigp then
+  		ball.pat = ball.bigp2
+  	else
+  		ball.pat = ball.bigp
+  	end
+  	  
+  else
+  	
+  	if ball.pat == ball.smallp then
+  		ball.pat = ball.smallp2
+  	else
+  		ball.pat = ball.smallp
+  	end
+  	
  	end
+ 
  end
+	if ball.r > 2 then
+		circfill(ball.x+2,ball.y+2,ball.r,5)
+	end
 	fillp(ball.pat)
 	circfill(ball.x,ball.y,ball.r,ball.col)
 	fillp()
