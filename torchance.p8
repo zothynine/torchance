@@ -164,17 +164,18 @@ end
 --start
 
 function update_start()
-	start.t += 1
+	start.dt += 1
 	
 	if btnp(5) then
 		mode = "aim"
 	end
 	
 	
-	if start.t == 4 then
+	if start.dt == 4 then
+		start.dt = 0
 		if start.gfx_d > 1 then
-			start.t = 0
 			start.gfx_d = mid(1,start.gfx_d-0.2,start.gfx_d)
+			start.gfx_o = start.gfx_d
 		end
 	end
 end
@@ -182,8 +183,10 @@ end
 function draw_start()
 	draw_goal_top()
 	--show start hint
-	draw_hint("starten mit [x]",true,72)
-	sspr(32,0,58,29,34,38,start.gfx_w/start.gfx_d,start.gfx_h/start.gfx_d)
+	if start.gfx_d == 1 then
+		draw_hint("starten mit [x]",true,72)
+	end
+	sspr(32,0,58,29,34*start.gfx_o,38,start.gfx_w/start.gfx_d,start.gfx_h/start.gfx_d)
 end
 -->8
 --aim
@@ -567,7 +570,8 @@ function _init()
 		gfx_w = 58,
 		gfx_h = 29,
 		gfx_d = 6,
-		t = 0
+		gfx_o = 6,
+		dt = 0
 	}
 	
 	gline = {
