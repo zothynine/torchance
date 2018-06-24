@@ -204,7 +204,7 @@ function update_aim()
 		player.x = ball.x-3
 	
 	if ball.y > ball.ty then
-		ball.r = mid(2,ball.y-ball.ty,4)
+		ball.r = mid(2,ball.y-ball.ty,3)
 		ball.y-=1
 		aiming.x = ball.x
 		player.y = ball.y+player.runin
@@ -645,7 +645,7 @@ function _init()
 		ty = 60+flr(rnd(50)),
 		speed = 0,
 		inplace = false,
-		col = 0x57,
+		col = 0x56,
 		bigp = 0b0011001111001100,
 		bigp2 = 0b1100110000110011,
 		smallp = 0b0101101001011010,
