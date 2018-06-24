@@ -294,7 +294,10 @@ function draw_aim()
  
  end
 	if ball.r > 2 then
-		circfill(ball.x+2,ball.y+2,ball.r,5)
+		ball.sh_off = (ball.y-ball.ty)/2
+		_sh = ball.sh_off
+		_c = 5
+		circfill(ball.x+_sh,ball.y+_sh,ball.r+1,_c)
 	end
 	fillp(ball.pat)
 	circfill(ball.x,ball.y,ball.r,ball.col)
@@ -650,7 +653,8 @@ function _init()
 		bigp2 = 0b1100110000110011,
 		smallp = 0b0101101001011010,
 		smallp2 = 0b1010010110100101,
-		pat = nil
+		pat = nil,
+		sh_off = 7
 	}
 	
 	shot = {
