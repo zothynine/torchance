@@ -28,6 +28,44 @@ __lua__
 --				- oefb mode
 --				- highscores (local)
 
+function update_particles()
+	if #particles > 0 then
+
+		for i=#particles,1,-1 do
+			_p = particles[i]
+ 		_p.l -= 1
+ 		
+ 		if _p.t == "splode" then
+ 			_vel = flr(rnd(12))+1
+				_p.y += _vel/2
+
+				if rnd(2) < 1 then
+ 				_p.x -= _vel
+ 			else
+ 				_p.x += _vel
+ 			end
+ 			
+ 		end
+ 		
+ 		if _p.l==0 then
+ 			del(particles,_p)
+ 		end
+		end
+		
+	end
+end
+
+function draw_particles()
+	if #particles > 0 then
+		for i=1,#particles do
+			_p = particles[i]
+			_ci = flr(rnd(#_p.c))+1
+			_c = _p.c[_ci]
+			pset(_p.x,_p.y,_c)
+		end
+	end
+end
+
 function check_fresh()
 	if not xdown and fresh then
 		fresh = false
@@ -35,6 +73,9 @@ function check_fresh()
 end
 
 function move_ball(down)
+	if ball.particles then
+		
+	end
  ball.speed = kicking.stren/10
  _velx = ball.speed * cos(ball.ang)
 	_vely = ball.speed * sin(ball.ang)
@@ -69,7 +110,6 @@ function goalie_reactions()
 
 	--catch slow ball
 	if kicking.stren < 15 then
-		
 		--slow down ball
 		kicking.stren = mid(0,kicking.stren-0.1,kicking.stren)
 	end
@@ -94,7 +134,10 @@ function check_catch()
 		local _gy = goalie.y+5
 		local _lvl = goalielvl
 		
-		if _by <= _gy
+		
+		if kicking.perfect then
+			goalie.catch = false
+		elseif _by <= _gy
 					and not shot.overshot then
 			if _bx >= _gx-_lvl
 						and _bx <= _gx+6+_lvl then
@@ -361,6 +404,12 @@ function update_kick()
 			shot.missed = true
 			ball.minx = -4
 		end
+		
+		if kicking.stren <= 60
+					and kicking.stren > 59 then
+					kicking.perfect = true
+					ball.particles = true
+		end
 
 		if player.y > ball.y
 					and not player.fixed then
@@ -373,6 +422,11 @@ function update_kick()
 
 			player.fixed = true
 			move_ball(false)
+			if kicking.perfect then
+				for bp=1,4 do
+					add(particles,{x=ball.x-3+(rnd(6)),y=ball.y+2+(rnd(6)),t="static",l=10,c={8,10}})
+				end
+			end
 			goalie_reactions()
 			check_catch()
 
@@ -386,6 +440,12 @@ function update_kick()
 			if ball.y <= 16 and not shot.done then
 				shot.done = true
 
+				if kicking.perfect then
+					for bp=1,40 do
+						add(particles,{x=ball.x-3+(rnd(6)),y=ball.y+2+(rnd(6)),t="splode",l=120,c={8,10}})
+					end
+				end
+				
 				if (ball.x-ball.r <= gline.l
 								and ball.x+ball.r >= gline.l)
 							or (ball.x-ball.r <= gline.l
@@ -550,6 +610,8 @@ function _update60()
 	if timer.frames == 59 then
 		timer.frames = 0
 	end
+	
+	update_particles()
 
 	if mode == "start" then
 		update_start()
@@ -565,6 +627,8 @@ end
 function _draw()
 	cls()
 	draw_grass()
+	draw_particles()
+	
 	if mode == "start" then
 		draw_start()
 	elseif mode == "aim" then
@@ -636,6 +700,7 @@ function _init()
 		ended = false,
 		stren = 0,
 		full = 62,
+		perfect = false,
 		velo = 0.1,
 		bary = 124
 	}
@@ -654,7 +719,8 @@ function _init()
 		smallp = 0b0101101001011010,
 		smallp2 = 0b1010010110100101,
 		pat = nil,
-		sh_off = 7
+		sh_off = 7,
+		particles = false
 	}
 	
 	shot = {
@@ -679,6 +745,7 @@ mode = "start"
 trys = 3
 goals = 0
 goalielvl = 0
+particles = {}
 __gfx__
 000000000555500005555000055550001111111111111111111111111111111111111111111111111111111111000000000000000000000033333333bbbbbbbb
 000000000555550085555500055555801888888888888888811888888888888881188888888888888118888881000000000000000000000033333333bbbbbbbb
