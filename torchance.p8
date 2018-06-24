@@ -39,18 +39,12 @@ function update_particles()
 
 		for i=#particles,1,-1 do
 			_p = particles[i]
- 		_p.l -= 1
+ 		_p.l -= 1 --decrease lifetime
  		
+ 		-- explosions
  		if _p.t == "splode" then
- 			_vel = flr(rnd(12))+1
-				_p.y += _vel/2
-
-				if rnd(2) < 1 then
- 				_p.x -= _vel
- 			else
- 				_p.x += _vel
- 			end
- 			
+ 				_p.x += _p.xv
+ 				_p.y += _p.yv
  		end
  		
  		if _p.l==0 then
@@ -460,8 +454,15 @@ function update_kick()
 				shot.done = true
 
 				if kicking.perfect then
-					for bp=1,40 do
-						add(particles,{x=ball.x-3+(rnd(6)),y=ball.y+2+(rnd(6)),t="splode",l=120,c={8,10}})
+					for bp=1,60 do
+						add(particles,{
+							x = ball.x-3+(rnd(6)),
+							y = ball.y+2+(rnd(6)),
+							xv = -1+rnd(2),
+							yv = -1+rnd(2),
+							t = "splode",
+							l = 120,c={8,10}
+						})
 					end
 				end
 				
