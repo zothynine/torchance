@@ -515,6 +515,12 @@ function update_kick()
 				timer.wait+=1
 			 			
  			if shot.pole then
+ 				
+ 				if not snd.hitpole then
+ 					snd.hitpole = true
+ 					sfx(3,2)
+ 				end
+ 				
  				move_ball(true)
  			else
  				if shot.missed then
@@ -709,6 +715,7 @@ function _init()
 		kicking = false,
 		cheers = false,
 		hitball = false,
+		hitpole = false,
 		splode = false,
 		whistle = false,
 		song = false
