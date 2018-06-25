@@ -16,12 +16,11 @@ __lua__
 --  - 17: start song
 
 --todo:
---		- score
+--		- score an game over screen
 --	 -	kick screen
 --				- ?bigger bar on start
 --				- random goalie actions
 
---  - start screen
 --		- screen setup
 				
 --  - powerups
@@ -557,15 +556,29 @@ function update_kick()
  			if shot.missed
  						or goalie.catch then
   			trys -= 1
+  			hatrick = 0
   		else
   			goals += 1
+  			hatrick += 1
   			goalielvl = mid(0,goalielvl+2,20)
   		end
+  		
+  		if hatrick==4 then
+  			hatrick = 0
+  			goalielvl = mid(0,goalielvl/2,goalielvl)
+  			
+  			--make goalie level even
+  			if goalielvl%2==1 then
+  				goalielvl-=1
+  			end
+  		end
+  		
   		if trys == 0 then
   			reset_game("gameover")
   		else
   			reset_game("aim")
   		end
+  		
 			end
 		end
 	end
@@ -822,6 +835,7 @@ end
 mode = "start"
 trys = 3
 goals = 0
+hatrick = 0
 goalielvl = 0
 particles = {}
 __gfx__
