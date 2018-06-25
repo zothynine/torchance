@@ -78,9 +78,11 @@ function check_fresh()
 end
 
 function move_ball(down)
-	if ball.particles then
-		
-	end
+ if goalie.catch then
+ 	aiming.draw = false
+ 	return
+ end
+ 
  ball.speed = kicking.stren/10
  _velx = ball.speed * cos(ball.ang)
 	_vely = ball.speed * sin(ball.ang)
@@ -133,24 +135,27 @@ function goalie_reactions()
 end
 
 function check_catch()
-		local _bx = ball.x
-		local _by = ball.y-ball.r
-		local _gx = goalie.x
-		local _gy = goalie.y+5
-		local _lvl = goalielvl
-		
-		
-		if kicking.perfect then
-			goalie.catch = false
-		elseif _by <= _gy
-					and not shot.overshot then
-			if _bx >= _gx-_lvl
-						and _bx <= _gx+6+_lvl then
-				ball.miny = goalie.y+6
-				goalie.catch = true
-				goalie.x = ball.x-ball.r
-			end
+	local _bx = ball.x
+	local _by = ball.y-ball.r
+	local _gx = goalie.x
+	local _gy = goalie.y+5
+	local _lvl = goalielvl
+	
+	if kicking.perfect then
+		goalie.catch = false
+	elseif _by <= _gy
+				and not shot.overshot then
+		if _bx >= _gx-_lvl
+					and _bx <= _gx+6+_lvl then
+			ball.miny = goalie.y+6
+			goalie.catch = true
+			goalie.x = ball.x-ball.r
 		end
+	end
+
+	if goalie.catch then
+		ball.y = goalie.y+4+ball.r
+	end
 end
 
 function draw_score()
@@ -388,7 +393,8 @@ function update_kick()
 
 	if xdown and not fresh then
 		kicking.started = true
-		if not snd.kicking then
+		if not snd.kicking
+					and not kicking.ended then
 			snd.kicking = true
 			sfx(2,1)
 		end
@@ -548,7 +554,8 @@ function update_kick()
 			else
 				timer.wait=0
 				--update game mode
- 			if shot.missed then
+ 			if shot.missed
+ 						or goalie.catch then
   			trys -= 1
   		else
   			goals += 1
@@ -578,6 +585,11 @@ function draw_kick()
 	if aiming.draw then
 		line(aiming.x,ball.miny,ball.x,ball.y,1)
 	end
+
+	--goalie
+	pal(8,1)
+	sspr(8,0,7,5,goalie.x,goalie.y)
+	pal()
 	
 	if shot.overshot then
 		--ball
@@ -585,12 +597,9 @@ function draw_kick()
 		circfill(ball.x,ball.y,ball.r,ball.col)
 		fillp()
 	end
+
 	--player
 	sspr(8,0,7,5,player.x,player.y)
-	pal(8,1)
-	--goalie
-	sspr(8,0,7,5,goalie.x,goalie.y)
-	pal()
 
 	-- strength bar
 	rectfill(122,60,125,125,7)
