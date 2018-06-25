@@ -11,7 +11,9 @@ __lua__
 --  - 03: kicking ball
 --  - 04: perfect shot swoosh
 --  - 05: perfect shot splode
---  - 17: start screen music
+--  - 06: cheers
+--  - 07: whistle
+--  - 17: start song
 
 --todo:
 --		- score
@@ -210,11 +212,13 @@ end
 --start
 
 function update_start()
-	if not start.song
+	
+	if not snd.song
 				and timer.frames == 50 then
-		start.song = true
+		snd.song = true
 		sfx(17)
 	end
+	
 	start.dt += 1
 	
 	if btnp(5) then
@@ -384,8 +388,8 @@ function update_kick()
 
 	if xdown and not fresh then
 		kicking.started = true
-		if not kicking.snd then
-			kicking.snd = true
+		if not snd.kicking then
+			snd.kicking = true
 			sfx(2,1)
 		end
 	end
@@ -393,8 +397,8 @@ function update_kick()
 	if not xdown
 				and kicking.started then
 		kicking.ended = true
-		sfx(-1,1)
-		kicking.sound = false
+		--sfx(-1,1)
+		snd.kicking = false
 	end
 
 	if kicking.started
@@ -438,8 +442,8 @@ function update_kick()
 
 			player.fixed = true
 
-			if not player.snd_kick then
-				player.snd_kick = true
+			if not snd.hitball then
+				snd.hitball = true
 				sfx(3,2)
 				if (kicking.perfect) sfx(4,2)
 			end
@@ -468,8 +472,8 @@ function update_kick()
 				-- ball splode
 				if kicking.perfect then
 					
-					if not ball.snd_splode then
-						ball.snd_splode = true
+					if not snd.splode then
+						snd.splode = true
 						sfx(5,2)
 					end
 					
@@ -509,13 +513,7 @@ function update_kick()
 			--start hint timer
 			if timer.wait < 120 then
 				timer.wait+=1
-			
- 			--if shot.pole
- 			--			and ball.speed > 0 then
- 			--	ball.y += ball.speed
- 			--	ball.speed -= 0.1
- 			--end
- 			
+			 			
  			if shot.pole then
  				move_ball(true)
  			else
@@ -523,6 +521,20 @@ function update_kick()
  					ball.miny = 0
  				end
  				if ball.y >= ball.miny then
+ 					
+ 					if kicking.perfect then
+  					if not snd.cheers
+  								and not shot.missed then
+  						sfx(6,3)
+  					end
+ 					else
+ 						if not snd.whistle
+ 									and not shot.missed
+ 									and not goalie.catch then
+  						sfx(7,3)
+  					end
+ 					end
+ 					
  					move_ball(false)
  				end
  			end
@@ -626,8 +638,10 @@ function update_gameover()
 	trys = 3
 	goals = 0
 	if btnp(5) then
+		sfx(0,0)
 		reset_game("aim")
 	elseif btnp(4) then
+		sfx(0,0)
 		reset_game("start")
 	end
 end
@@ -691,13 +705,21 @@ function _init()
 	xdown = false
 	fresh = true
 	
+	snd = {
+		kicking = false,
+		cheers = false,
+		hitball = false,
+		splode = false,
+		whistle = false,
+		song = false
+	}
+	
 	start = {
 		gfx_w = 58,
 		gfx_h = 29,
 		gfx_d = 6,
 		gfx_o = 6,
-		dt = 0,
-		song = false
+		dt = 0
 	}
 	
 	gline = {
@@ -717,8 +739,7 @@ function _init()
 		x = 59,
 		y = 113,
 		runin = 30,
-		fixed = false,
-		snd_kick = false
+		fixed = false
 	}
 	
 	goalie = {
@@ -743,8 +764,7 @@ function _init()
 		full = 62,
 		perfect = false,
 		velo = 0.1,
-		bary = 124,
-		snd = false
+		bary = 124
 	}
 	
 	ball = {
@@ -762,8 +782,7 @@ function _init()
 		smallp2 = 0b1010010110100101,
 		pat = nil,
 		sh_off = 7,
-		particles = false,
-		snd_splode = false
+		particles = false
 	}
 	
 	shot = {
@@ -973,8 +992,8 @@ __sfx__
 000b00001277300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 00030000156111961220612276122d6123361237612086020b6020d6020f60213602156021b6021f60224602296022f60234602396023d6023f60200000000000000000000000000000000000000000000000000
 000c000012650106500e6300c6300a620076200461002610000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+000700000f63019133191332d6000000000000000000f6301913319133000000000000000000000f63019133191330f63019133191330f6301913319133000000000000000000000000000000000000000000000
+010200003f0153f0153f0153f0153f0153f0153f0153f0153f0153f0153f0153f0153f0153f015000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
