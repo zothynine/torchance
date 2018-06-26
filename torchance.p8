@@ -475,26 +475,6 @@ function update_kick()
 			
 			if ball.y <= 16 and not shot.done then
 				shot.done = true
-
-				-- ball splode
-				if kicking.perfect then
-					
-					if not snd.splode then
-						snd.splode = true
-						sfx(5,2)
-					end
-					
-					for bp=1,60 do
-						add(particles,{
-							x = ball.x-3+(rnd(6)),
-							y = ball.y+2+(rnd(6)),
-							xv = -1+rnd(2),
-							yv = -1+rnd(2),
-							t = "splode",
-							l = 120,c={8,10}
-						})
-					end
-				end
 				
 				if (ball.x-ball.r <= gline.l
 								and ball.x+ball.r >= gline.l)
@@ -515,6 +495,28 @@ function update_kick()
 						shot.pole = false
 						shot.missed = true
 				end
+				
+				-- ball splode
+				if kicking.perfect
+							and not shot.missed then
+					
+					if not snd.splode then
+						snd.splode = true
+						sfx(5,2)
+					end
+					
+					for bp=1,60 do
+						add(particles,{
+							x = ball.x-3+(rnd(6)),
+							y = ball.y+2+(rnd(6)),
+							xv = -1+rnd(2),
+							yv = -1+rnd(2),
+							t = "splode",
+							l = 120,c={8,10}
+						})
+					end
+				end
+
 			end 	
 			
 			--start hint timer
