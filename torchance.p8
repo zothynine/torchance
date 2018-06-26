@@ -38,38 +38,6 @@ __lua__
 --				- oefb mode
 --				- highscores (local)
 
-function update_particles()
-	if #particles > 0 then
-
-		for i=#particles,1,-1 do
-			_p = particles[i]
- 		_p.l -= 1 --decrease lifetime
- 		
- 		-- explosions
- 		if _p.t == "splode" then
- 				_p.x += _p.xv
- 				_p.y += _p.yv
- 		end
- 		
- 		if _p.l==0 then
- 			del(particles,_p)
- 		end
-		end
-		
-	end
-end
-
-function draw_particles()
-	if #particles > 0 then
-		for i=1,#particles do
-			_p = particles[i]
-			_ci = flr(rnd(#_p.c))+1
-			_c = _p.c[_ci]
-			pset(_p.x,_p.y,_c)
-		end
-	end
-end
-
 function check_fresh()
 	if not xdown and fresh then
 		fresh = false
@@ -164,14 +132,31 @@ function draw_score()
 	print("tore:"..goals,88,2,7)
 end
 
-function draw_hint(_txt,_doblink,_y)
+function draw_hint(_txt,_doblink,_y,_parts)
 	local x = (128-(4*#_txt))/2
 	local y = 0
 	local col = hint.fixedcol
 	if (_doblink) col = hint.txtcol
 	if (_y ~= nil) y = _y
-	if (_doblink) blink_hint_txt()
+	if (_doblink ~= nil) blink_hint_txt()
+	
 	rectfill(0,y,127,y+8,1)
+	
+	if _parts ~= nil then
+		for i=1,5 do
+ 		if timer.frames%24==0 then
+  		add(particles,{
+  			x = 0,
+  			y = y,
+  			t = "hint",
+  			l = 30,
+  			s = 1+rnd(4),
+  			c={12,13,14}
+  		})
+  	end
+		end
+	end
+	
 	print(_txt,x,y+2,col)
 end
 
@@ -457,7 +442,13 @@ function update_kick()
 
 			if kicking.perfect then
 				for bp=1,4 do
-					add(particles,{x=ball.x-3+(rnd(6)),y=ball.y+2+(rnd(6)),t="static",l=10,c={8,10}})
+					add(particles,{
+						x=ball.x-3+(rnd(6)),
+						y=ball.y+2+(rnd(6)),
+						t="static",
+						l=10,
+						c={8,9,10}
+					})
 				end
 			end
 			goalie_reactions()
@@ -650,9 +641,11 @@ function draw_kick()
  		elseif shot.tooslow then
  			_goaltxt = "zu wenig power!"
  		end
+			draw_hint(_goaltxt,false,60)
+		else
+			draw_hint(_goaltxt,false,60,true)
 		end	
 	
-		draw_hint(_goaltxt,false,60)
 	end
 	
 	--draw goalie skill pointers
@@ -680,7 +673,47 @@ function draw_gameover()
 	draw_hint("zum start mit [c]",false,68)
 end
 -->8
---5
+--particle5
+function update_particles()
+	if #particles > 0 then
+
+		for i=#particles,1,-1 do
+			_p = particles[i]
+ 		_p.l -= 1 --decrease lifetime
+ 		
+ 		-- explosions
+ 		if _p.t == "splode" then
+ 				_p.x += _p.xv
+ 				_p.y += _p.yv
+ 		end
+ 		
+ 		-- hints
+ 		if _p.t == "hint" then
+ 			_p.x += _p.s
+ 		end
+ 		
+ 		if _p.l==0 then
+ 			del(particles,_p)
+ 		end
+		end
+		
+	end
+end
+
+function draw_particles()
+	if #particles > 0 then
+		for i=1,#particles do
+			_p = particles[i]
+			_ci = flr(rnd(#_p.c))+1
+			_c = _p.c[_ci]
+			pset(_p.x,_p.y,_c)
+			--second particle for hints
+			if _p.t == "hint" then
+				pset(_p.x,_p.y+8,_c)
+			end
+		end
+	end
+end
 -->8
 --6
 -->8
@@ -708,7 +741,6 @@ end
 function _draw()
 	cls()
 	draw_grass()
-	draw_particles()
 	
 	if mode == "start" then
 		draw_start()
@@ -719,6 +751,8 @@ function _draw()
 	elseif mode == "gameover" then
 		draw_gameover()
 	end
+
+	draw_particles()
 end
 
 function reset_game(_mode)
