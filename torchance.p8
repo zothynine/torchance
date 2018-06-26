@@ -674,16 +674,22 @@ end
 function update_gameover()
 	if btnp(5) then
 		sfx(0,0)
+		goals = 0
+		trys = 3
 		reset_game("aim")
 	elseif btnp(4) then
 		sfx(0,0)
+		goals = 0
+		trys = 3
 		reset_game("start")
 	end
 end
 
 function draw_gameover()
+	_goaltxt = "tore"
+	if (goals == 1) _goaltxt = "tor"
 	draw_hint("game over",false)
-	draw_hint("du hast "..goals.." tore geschossen!",false,60,true)
+	draw_hint("du hast "..goals.." ".._goaltxt.." geschossen!",false,60,true)
 	draw_hint("versuche es nochmal ❎",true,70)
 	draw_hint("zum start mit [c]",false,78)
 end
@@ -772,11 +778,6 @@ end
 
 function reset_game(_mode)
 	mode = _mode
-	
-	if mode == "start" then
-		goals = 0
-		trys = 3
-	end
 	
 	if _mode == "gameover" then
 		goalielvl = 0
