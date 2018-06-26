@@ -160,6 +160,12 @@ function draw_hint(_txt,_doblink,_y,_parts)
 	print(_txt,x,y+2,col)
 end
 
+function draw_hatrick_hint()
+	if hatrick == 3 then
+		draw_hint("hatrick chance",false,0,true)
+	end
+end
+
 function draw_grass()
 	map(0,0,0,0,16,16)
 end
@@ -246,7 +252,7 @@ function animate_player_sprite()
 end
 
 function update_aim()
-		player.x = ball.x-3
+	player.x = ball.x-3
 	
 	if ball.y > ball.ty then
 		ball.r = mid(2,ball.y-ball.ty,3)
@@ -367,6 +373,8 @@ function draw_aim()
 				and not aiming.ended then
 		draw_hint("loslassen um zu fixieren",true)
 	end
+
+	draw_hatrick_hint()
 end
 -->8
 --kick
@@ -504,7 +512,7 @@ function update_kick()
 						shot.pole = false
 						shot.missed = true
 				end
-			end
+			end 	
 			
 			--start hint timer
 			if timer.wait < 120 then
@@ -540,9 +548,10 @@ function update_kick()
  					move_ball(false)
  				end
  			end
- 			
+   	
 			else
 				timer.wait=0
+				
 				--update game mode
  			if shot.missed
  						or goalie.catch then
@@ -551,7 +560,9 @@ function update_kick()
   		else
   			goals += 1
   			hatrick += 1
-  			goalielvl = mid(0,goalielvl+2,20)
+  			if not kicking.perfect then
+  				goalielvl = mid(0,goalielvl+2,20)
+  			end
   		end
   		
   		if hatrick==4 then
@@ -651,6 +662,8 @@ function draw_kick()
 	--draw goalie skill pointers
 	pset(goalie.x-goalielvl,goalie.y+4,8)
 	pset(goalie.x+6+goalielvl,goalie.y+4,8)
+
+	draw_hatrick_hint()
 end
 
 -->8
