@@ -138,7 +138,10 @@ function draw_hint(_txt,_doblink,_y,_parts)
 	local col = hint.fixedcol
 	if (_doblink) col = hint.txtcol
 	if (_y ~= nil) y = _y
-	if (_doblink ~= nil) blink_hint_txt()
+	if _doblink ~= nil
+				and _doblink then
+	 blink_hint_txt()
+	end
 	
 	rectfill(0,y,127,y+8,1)
 	
@@ -669,8 +672,6 @@ end
 -->8
 --game over
 function update_gameover()
-	trys = 3
-	goals = 0
 	if btnp(5) then
 		sfx(0,0)
 		reset_game("aim")
@@ -682,8 +683,9 @@ end
 
 function draw_gameover()
 	draw_hint("game over",false)
-	draw_hint("versuche es nochmal ❎",true,60)
-	draw_hint("zum start mit [c]",false,68)
+	draw_hint("du hast "..goals.." tore geschossen!",false,60,true)
+	draw_hint("versuche es nochmal ❎",true,70)
+	draw_hint("zum start mit [c]",false,78)
 end
 -->8
 --particle5
@@ -770,9 +772,16 @@ end
 
 function reset_game(_mode)
 	mode = _mode
+	
+	if mode == "start" then
+		goals = 0
+		trys = 3
+	end
+	
 	if _mode == "gameover" then
 		goalielvl = 0
 	end
+ 
  _init()
 end
 
