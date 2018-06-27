@@ -14,29 +14,25 @@ __lua__
 --  - 06: cheers
 --  - 07: whistle
 --  - 17: start song
-
 --todo:
---		- score an game over screen
---	 -	kick screen
---				- ?bigger bar on start
---				- random goalie actions
-
---		- screen setup
-				
---  - powerups
---				- hatrick
-
---  - juicyness
---    - fade out on mode change
---				- particles
---				- screenshake
-
 --  - sfx/music
---  - finalize gfx
 
 --  - nice to have
 --				- oefb mode
 --				- highscores (local)
+--    - fade out on mode change
+--				- random goalie actions
+
+function camshake()
+	if timer.shake > 0 then
+		cam_x = -3+rnd(6)
+		cam_y = -3+rnd(6)
+		timer.shake -= 1
+	else
+		cam_x = 0
+		cam_y = 0
+	end
+end
 
 function check_fresh()
 	if not xdown and fresh then
@@ -503,6 +499,7 @@ function update_kick()
 					if not snd.splode then
 						snd.splode = true
 						sfx(5,2)
+						timer.shake = 30
 					end
 					
 					for bp=1,60 do
@@ -519,6 +516,9 @@ function update_kick()
 
 			end 	
 			
+					
+			camshake()
+				
 			--start hint timer
 			if timer.wait < 120 then
 				timer.wait+=1
@@ -762,6 +762,7 @@ function _update60()
 end
 
 function _draw()
+	camera(cam_x,cam_y)
 	cls()
 	draw_grass()
 	
@@ -818,7 +819,8 @@ function _init()
 	
 	timer = {
 		frames = 0,
-		wait = 0
+		wait = 0,
+		shake = 0
 	}
 	
 	player = {
@@ -891,6 +893,8 @@ function _init()
 	}
 end
 
+cam_x = 0
+cam_y = 0
 mode = "start"
 trys = 3
 goals = 0
