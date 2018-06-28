@@ -160,7 +160,7 @@ function draw_hint(_txt,_doblink,_y,_parts)
 end
 
 function draw_hatrick_hint()
-	if hatrick == 3 then
+	if hatrick == 2 then
 		draw_hint("hatrick chance",false,0,true)
 	end
 end
@@ -570,9 +570,9 @@ function update_kick()
   			end
   		end
   		
-  		if hatrick==4 then
+  		if hatrick==3 then
   			hatrick = 0
-  			goalielvl = mid(0,goalielvl/2,goalielvl)
+  			goalielvl -= 2 --mid(0,goalielvl/2,goalielvl)
   			
   			--make goalie level even
   			if goalielvl%2==1 then
