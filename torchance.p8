@@ -474,7 +474,7 @@ function update_kick()
 				
 				if (ball.x-ball.r <= gline.l
 								and ball.x+ball.r >= gline.l)
-							or (ball.x-ball.r <= gline.l
+							or (ball.x-ball.r <= gline.r
 											and ball.x+ball.r >= gline.r) then
 
 						shot.outside = false
